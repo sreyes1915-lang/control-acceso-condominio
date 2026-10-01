@@ -1,0 +1,1889 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Control de Acceso</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,system-ui,sans-serif;
+background:#f4f7fb;
+color:#172033
+}
+
+header{
+padding:20px 28px;
+background:white;
+border-bottom:1px solid #dfe5ee;
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.brand{
+display:flex;
+gap:12px;
+align-items:center
+}
+
+.logo{
+width:42px;
+height:42px;
+border-radius:12px;
+background:#2563eb;
+display:grid;
+place-items:center;
+color:white;
+font-weight:bold
+}
+
+h1,h2,p{margin:0}
+
+main{
+max-width:1100px;
+margin:auto;
+padding:28px
+}
+
+nav{
+display:flex;
+gap:8px;
+margin-bottom:24px;
+flex-wrap:wrap
+}
+
+button{
+border:1px solid #dfe5ee;
+background:white;
+color:#172033;
+padding:11px 15px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold
+}
+
+button.primary{
+background:#2563eb;
+color:white;
+border-color:#2563eb
+}
+
+button.active{
+background:#2563eb;
+color:white
+}
+
+.hidden{
+display:none!important
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:16px
+}
+
+.card{
+background:white;
+border:1px solid #dfe5ee;
+border-radius:16px;
+padding:20px
+}
+
+.stat{
+font-size:30px;
+font-weight:bold;
+margin-top:8px
+}
+
+.muted{
+color:#667085;
+font-size:14px
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:12px;
+align-items:center
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:14px
+}
+
+th,td{
+padding:13px 10px;
+border-bottom:1px solid #dfe5ee;
+text-align:left
+}
+
+.pill{
+padding:5px 9px;
+border-radius:99px;
+font-size:12px;
+font-weight:bold
+}
+
+.good{
+background:#dcfce7;
+color:#166534
+}
+
+.bad{
+background:#fee2e2;
+color:#991b1b
+}
+
+input,select{
+width:100%;
+padding:12px;
+border:1px solid #dfe5ee;
+border-radius:10px;
+background:white;
+color:#172033;
+margin-top:6px
+}
+
+label{
+font-size:13px;
+font-weight:bold
+}
+
+.form{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px
+}
+
+.full{
+grid-column:1/-1
+}
+
+.qrbox{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:12px
+}
+
+.qrbox img{
+width:220px;
+height:220px
+}
+
+.backup{
+font-size:28px;
+font-weight:900;
+letter-spacing:4px;
+margin-top:5px;
+color:#172033
+}
+
+.scanner{
+max-width:520px;
+margin:auto;
+text-align:center
+}
+
+video{
+width:100%;
+border-radius:16px;
+background:#000;
+margin:16px 0;
+min-height:280px
+}
+
+.result{
+margin-top:16px;
+padding:18px;
+border-radius:14px;
+text-align:left
+}
+
+.goodbox{
+background:#ecfdf3;
+border:2px solid #22c55e;
+color:#14532d
+}
+
+.badbox{
+background:#fef2f2;
+border:2px solid #ef4444;
+color:#7f1d1d
+}
+
+.smallbtn{
+padding:7px 9px;
+font-size:12px
+}
+
+.login{
+position:fixed;
+inset:0;
+background:#0b1220;
+display:grid;
+place-items:center;
+z-index:9999;
+padding:20px
+}
+
+.loginbox{
+width:min(420px,100%);
+background:#121b2b;
+border:1px solid #29364b;
+border-radius:18px;
+padding:28px;
+color:white
+}
+
+.loginbox input{
+background:#fff;
+color:#172033
+}
+
+@media(max-width:650px){
+
+main{
+padding:18px
+}
+
+.form{
+grid-template-columns:1fr
+}
+
+.full{
+grid-column:auto
+}
+
+header{
+padding:18px
+}
+
+table{
+font-size:13px
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="brand">
+
+<div class="logo">
+QR
+</div>
+
+<div>
+
+<h1>Control de Acceso</h1>
+
+<div class="muted">
+Condominio Casa Mia · autorización digital
+</div>
+
+</div>
+
+</div>
+
+<div class="muted">
+Panel administrativo
+</div>
+
+</header>
+
+
+<main>
+
+<nav>
+
+<button
+class="active"
+onclick="show('dash',this)">
+Resumen
+</button>
+
+<button
+onclick="show('people',this)">
+Autorizados
+</button>
+</nav>
+
+
+<section id="dash">
+
+<div class="grid">
+
+<div class="card">
+
+<div class="muted">
+Personas registradas
+</div>
+
+<div
+class="stat"
+id="count">
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="muted">
+Autorizaciones activas
+</div>
+
+<div
+class="stat"
+id="active">
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="muted">
+Último acceso
+</div>
+
+<div
+class="stat"
+style="font-size:18px"
+id="last">
+Sin registros
+</div>
+
+</div>
+
+</div>
+
+
+<div
+class="card"
+style="margin-top:18px">
+
+<h2>
+Cómo funciona
+</h2>
+
+<p
+class="muted"
+style="margin-top:10px;line-height:1.6">
+
+1. Administración registra a la persona.<br>
+2. Se genera un QR único.<br>
+3. El residente muestra el QR al guarda.<br>
+4. Si el QR falla, el guarda puede usar el código de respaldo.<br>
+5. El sistema indica si el acceso está autorizado.
+
+</p>
+
+</div>
+
+</section>
+
+
+<section
+id="people"
+class="hidden">
+
+<div class="row">
+
+<div>
+
+<h2>
+Personas autorizadas
+</h2>
+
+<div class="muted">
+Administra quién puede ingresar.
+</div>
+
+</div>
+
+<button
+class="primary"
+onclick="newPerson()">
+
++ Agregar persona
+
+</button>
+
+</div>
+
+
+<div
+class="card"
+style="margin-top:16px;overflow:auto">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+Nombre
+</th>
+
+<th>
+Unidad
+</th>
+
+<th>
+Tipo
+</th>
+
+<th>
+Estado
+</th>
+
+<th>
+Acciones
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tbody"></tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+
+<section
+id="form"
+class="hidden">
+
+<div class="card">
+
+<div class="row">
+
+<div>
+
+<h2>
+Nueva persona
+</h2>
+
+<div class="muted">
+El QR y el código se generan automáticamente.
+</div>
+
+</div>
+
+<button
+onclick="show('people')">
+
+Cancelar
+
+</button>
+
+</div>
+
+
+<form
+onsubmit="savePerson(event)"
+style="margin-top:20px">
+
+<div class="form">
+
+<div>
+
+<label>
+Nombre completo
+</label>
+
+<input
+id="name"
+required>
+
+</div>
+
+
+<div>
+
+<label>
+Casa / apartamento
+</label>
+
+<input
+id="unit"
+required>
+
+</div>
+
+
+<div>
+
+<label>
+Tipo
+</label>
+
+<select id="type">
+
+<option>
+Residente
+</option>
+
+<option>
+Familiar
+</option>
+
+<option>
+Visitante frecuente
+</option>
+
+<option>
+Proveedor
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>
+Estado
+</label>
+
+<select id="status">
+
+<option>
+Activo
+</option>
+
+<option>
+Inactivo
+</option>
+
+</select>
+
+</div>
+
+
+<div class="full">
+
+<button
+class="primary"
+type="submit">
+
+Guardar autorización
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+
+<section
+id="qr"
+class="hidden">
+
+<div class="card">
+
+<div class="row">
+
+<div>
+
+<h2>
+Credencial de acceso
+</h2>
+
+<div class="muted">
+El autorizado puede mostrar esta pantalla desde su teléfono.
+</div>
+
+</div>
+
+<button
+onclick="show('people')">
+
+Volver
+
+</button>
+
+</div>
+
+
+<div
+class="qrbox"
+style="margin-top:22px">
+
+
+<h2 id="qrname"></h2>
+
+
+<div
+class="muted"
+id="qrun">
+</div>
+
+
+<img
+id="qrimg"
+alt="Código QR">
+
+
+<strong
+id="qrstatus">
+</strong>
+
+
+<div
+style="text-align:center;margin-top:10px">
+
+<div class="muted">
+Código de respaldo
+</div>
+
+
+<div
+id="qrcodebackup"
+class="backup">
+</div>
+
+
+<div
+class="muted"
+style="margin-top:6px">
+
+Si la cámara no puede leer el QR,
+el guarda puede escribir este código.
+
+</div>
+
+</div>
+
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px">
+
+<button
+class="primary"
+onclick="window.print()">
+
+🖨 Imprimir / Guardar
+
+</button>
+
+<button
+class="primary"
+onclick="shareInvitation()">
+
+📤 Compartir invitación
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<div
+id="login"
+class="login">
+
+<div class="loginbox">
+
+<h2>
+🔐 Iniciar sesión
+</h2>
+
+<p
+style="color:#a9b5c8;margin-top:8px">
+
+Panel de administración del condominio
+
+</p>
+
+
+<label
+style="display:block;margin-top:20px">
+
+Correo
+
+</label>
+
+<input
+id="authEmail"
+type="email"
+placeholder="admin@condominio.com">
+
+
+<label
+style="display:block;margin-top:12px">
+
+Contraseña
+
+</label>
+
+<input
+id="authPass"
+type="password"
+placeholder="Contraseña">
+
+
+<button
+id="authBtn"
+class="primary"
+style="width:100%;margin-top:18px">
+
+Entrar
+
+</button>
+
+
+<div
+id="authMsg"
+style="margin-top:12px;color:#fca5a5">
+</div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import {
+createClient
+}
+from
+'https://esm.sh/@supabase/supabase-js@2';
+
+
+import QRCode
+from
+'https://esm.sh/qrcode@1.5.4';
+
+
+const SUPABASE_URL =
+'https://dbnjciqldjoospgmvlbq.supabase.co';
+
+
+const SUPABASE_KEY =
+'sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo';
+
+
+const supabase =
+createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+let people=[];
+
+function backupCode(token){
+  const clean=String(token||'').replace(/-/g,'').toLowerCase();
+  let hash=2166136261;
+  for(const ch of clean){
+    hash ^= ch.charCodeAt(0);
+    hash = Math.imul(hash,16777619);
+  }
+  return String((hash>>>0)%10000).padStart(4,'0');
+}
+
+
+function show(id,button){
+
+document
+.querySelectorAll('main section')
+.forEach(
+s=>s.classList.add('hidden')
+);
+
+document
+.getElementById(id)
+.classList.remove('hidden');
+
+
+if(button){
+
+document
+.querySelectorAll('nav button')
+.forEach(
+b=>b.classList.remove('active')
+);
+
+button.classList.add('active');
+
+}
+
+}
+
+
+window.show=show;
+
+
+async function loadPeople(){
+
+const {
+data,
+error
+}=await supabase
+.from('authorized_people')
+.select(
+'id,name,type,status,qr_token,unit_id,created_at,units(name)'
+)
+.order(
+'created_at',
+{
+ascending:false
+}
+);
+
+
+if(error){
+
+alert(
+'Error al cargar personas: '
++error.message
+);
+
+return;
+
+}
+
+
+people=(data||[]).map(
+p=>({
+
+...p,
+
+unit:
+p.units?.name||''
+
+})
+);
+
+
+render();
+
+}
+
+
+function render(){
+
+document
+.getElementById('count')
+.textContent=
+people.length;
+
+
+document
+.getElementById('active')
+.textContent=
+people.filter(
+p=>p.status==='Activo'
+).length;
+
+
+const tbody=
+document
+.getElementById('tbody');
+
+
+tbody.innerHTML=
+people.map(
+p=>`
+
+<tr>
+
+<td>
+
+<b>
+${p.name}
+</b>
+
+<div class="muted">
+
+QR:
+${p.qr_token
+.slice(0,8)
+.toUpperCase()}
+
+</div>
+
+</td>
+
+
+<td>
+${p.unit}
+</td>
+
+
+<td>
+${p.type}
+</td>
+
+
+<td>
+
+<span
+class="pill ${
+p.status==='Activo'
+?'good'
+:'bad'
+}">
+
+${p.status}
+
+</span>
+
+</td>
+
+
+<td>
+
+<button
+class="smallbtn"
+onclick="viewQR('${p.id}')">
+
+QR
+
+</button>
+
+
+<button
+class="smallbtn"
+onclick="toggleStatus('${p.id}')">
+
+${
+p.status==='Activo'
+?'Desactivar'
+:'Activar'
+}
+
+</button>
+
+</td>
+
+</tr>
+
+`
+).join('');
+
+}
+
+
+window.newPerson=function(){
+
+document
+.getElementById('name')
+.value='';
+
+
+document
+.getElementById('unit')
+.value='';
+
+
+document
+.getElementById('status')
+.value='Activo';
+
+
+show('form');
+
+};
+
+
+window.savePerson=
+async function(event){
+
+event.preventDefault();
+
+
+const name=
+document
+.getElementById('name')
+.value
+.trim();
+
+
+const unitName=
+document
+.getElementById('unit')
+.value
+.trim();
+
+
+const type=
+document
+.getElementById('type')
+.value;
+
+
+const status=
+document
+.getElementById('status')
+.value;
+
+
+const {
+data:unit,
+error:unitError
+}=await supabase
+.from('units')
+.upsert(
+{
+name:unitName
+},
+{
+onConflict:'name'
+}
+)
+.select()
+.single();
+
+
+if(unitError){
+
+alert(
+'Error con la unidad: '
++unitError.message
+);
+
+return;
+
+}
+
+
+const {
+data:person,
+error
+}=await supabase
+.from('authorized_people')
+.insert({
+
+name:name,
+
+unit_id:unit.id,
+
+type:type,
+
+status:status
+
+})
+.select(
+'id,name,type,status,qr_token,unit_id,created_at,units(name)'
+)
+.single();
+
+
+if(error){
+
+alert(
+'No se pudo guardar: '
++error.message
+);
+
+return;
+
+}
+
+
+await loadPeople();
+
+
+viewQR(
+person.id
+);
+
+
+};
+
+
+window.toggleStatus=
+async function(id){
+
+const person=
+people.find(
+p=>p.id===id
+);
+
+
+if(!person)return;
+
+
+const newStatus=
+person.status==='Activo'
+?'Inactivo'
+:'Activo';
+
+
+const {
+error
+}=await supabase
+.from('authorized_people')
+.update({
+status:newStatus,
+updated_at:new Date().toISOString()
+})
+.eq(
+'id',
+id
+);
+
+
+if(error){
+
+alert(
+'No se pudo cambiar el estado: '
++error.message
+);
+
+return;
+
+}
+
+
+await loadPeople();
+
+};
+
+
+window.viewQR=
+async function(id){
+
+const person=
+people.find(
+p=>p.id===id
+);
+
+
+if(!person)return;
+
+
+const backup=
+backupCode(person.qr_token);
+
+
+document
+.getElementById('qrname')
+.textContent=
+person.name;
+
+
+document
+.getElementById('qrun')
+.textContent=
+person.unit+
+' · '+
+person.type;
+
+
+document
+.getElementById('qrcodebackup')
+.textContent=
+backup;
+
+
+document
+.getElementById('qrstatus')
+.textContent=
+person.status==='Activo'
+?'● AUTORIZADO'
+:'● NO AUTORIZADO';
+
+
+document
+.getElementById('qrstatus')
+.style.color=
+person.status==='Activo'
+?'#16a34a'
+:'#dc2626';
+
+
+try{
+
+document
+.getElementById('qrimg')
+.src=
+await QRCode.toDataURL(
+person.qr_token,
+{
+width:220,
+margin:2,
+errorCorrectionLevel:'H'
+}
+);
+
+}catch(error){
+
+console.error(error);
+
+}
+
+
+show('qr');
+
+};
+
+
+window.validateManual=
+async function(){
+
+const code=
+document
+.getElementById('manual')
+.value
+.trim()
+.toUpperCase();
+
+
+if(!code){
+
+return;
+
+}
+
+
+await validate(
+code,
+true
+);
+
+};
+
+
+async function validate(
+value,
+isBackup=false
+){
+
+const input=
+String(value||'')
+.trim();
+
+
+let person=null;
+
+
+if(!input){
+
+return;
+
+}
+
+
+if(isBackup){
+
+const {
+data,
+error
+}=await supabase
+.from('authorized_people')
+.select(
+'id,name,type,status,qr_token,unit_id,units(name)'
+);
+
+
+if(!error){
+
+person=
+(data||[])
+.find(
+p=>
+backupCode(p.qr_token)===input.replace(/\D/g,'').slice(0,4)
+);
+
+}
+
+}else{
+
+const {
+data
+}=await supabase
+.from('authorized_people')
+.select(
+'id,name,type,status,qr_token,unit_id,units(name)'
+)
+.eq(
+'qr_token',
+input
+)
+.maybeSingle();
+
+
+if(data){
+
+person=data;
+
+}
+
+}
+
+
+if(person){
+
+person.unit=
+person.units?.name||'';
+
+}
+
+
+const result=
+person &&
+person.status==='Activo'
+?'AUTORIZADO'
+:'DENEGADO';
+
+
+await supabase
+.from('access_logs')
+.insert({
+
+person_id:
+person?.id||null,
+
+qr_token:
+person?.qr_token||null,
+
+result:result,
+
+guard_name:'Guarda'
+
+});
+
+
+const resultBox=
+document
+.getElementById('result');
+
+
+if(!person){
+
+resultBox.innerHTML=`
+
+<div class="result badbox">
+
+<b>
+✕ NO AUTORIZADO
+</b>
+
+<br>
+
+<span>
+QR o código no encontrado.
+</span>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+if(person.status!=='Activo'){
+
+resultBox.innerHTML=`
+
+<div class="result badbox">
+
+<b>
+✕ ACCESO DENEGADO
+</b>
+
+<br>
+
+<strong>
+${person.name}
+</strong>
+
+<br>
+
+${person.unit}
+·
+${person.type}
+
+<br>
+
+<span>
+La autorización está inactiva.
+</span>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+document
+.getElementById('last')
+.textContent=
+person.name+
+' · '+
+new Date()
+.toLocaleTimeString();
+
+
+resultBox.innerHTML=`
+
+<div class="result goodbox">
+
+<b>
+✓ ACCESO AUTORIZADO
+</b>
+
+<br>
+
+<strong>
+${person.name}
+</strong>
+
+<br>
+
+${person.unit}
+·
+${person.type}
+
+<br>
+
+<span>
+${new Date().toLocaleString()}
+</span>
+
+</div>
+
+`;
+
+}
+
+
+window.startScan=
+async function(){
+
+const video=
+document
+.getElementById('video');
+
+
+video.classList.remove(
+'hidden'
+);
+
+
+try{
+
+const stream=
+await navigator
+.mediaDevices
+.getUserMedia({
+
+video:{
+facingMode:
+'environment'
+},
+
+audio:false
+
+});
+
+
+video.srcObject=
+stream;
+
+
+const jsQRmodule=
+await import(
+'https://esm.sh/jsqr@1.4.0'
+);
+
+
+const jsQR=
+jsQRmodule.default||
+jsQRmodule;
+
+
+const canvas=
+document
+.createElement('canvas');
+
+
+const context=
+canvas.getContext(
+'2d',
+{
+willReadFrequently:true
+}
+);
+
+
+const scan=
+async()=>{
+
+if(video.readyState>=2){
+
+canvas.width=
+video.videoWidth;
+
+
+canvas.height=
+video.videoHeight;
+
+
+context.drawImage(
+video,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+const image=
+context.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+const code=
+jsQR(
+image.data,
+image.width,
+image.height
+);
+
+
+if(code?.data){
+
+await validate(
+code.data,
+false
+);
+
+
+stream
+.getTracks()
+.forEach(
+track=>
+track.stop()
+);
+
+
+video.classList.add(
+'hidden'
+);
+
+
+return;
+
+}
+
+}
+
+
+requestAnimationFrame(
+scan
+);
+
+};
+
+
+scan();
+
+
+}catch(error){
+
+console.error(error);
+
+
+alert(
+'No se pudo acceder a la cámara. Puede usar el código de respaldo.'
+);
+
+}
+
+};
+
+
+document
+.getElementById('authBtn')
+.onclick=
+async function(){
+
+const email=
+document
+.getElementById('authEmail')
+.value
+.trim();
+
+
+const password=
+document
+.getElementById('authPass')
+.value;
+
+
+const message=
+document
+.getElementById('authMsg');
+
+
+message.textContent=
+'Conectando...';
+
+
+const {
+error
+}=await supabase
+.auth
+.signInWithPassword({
+
+email:email,
+
+password:password
+
+});
+
+
+if(error){
+
+message.textContent=
+'Correo o contraseña incorrectos.';
+
+return;
+
+}
+
+
+document
+.getElementById('login')
+.classList.add('hidden');
+
+
+await loadPeople();
+
+};
+
+
+document
+.getElementById('authPass')
+.addEventListener(
+'keydown',
+event=>{
+
+if(event.key==='Enter'){
+
+document
+.getElementById('authBtn')
+.click();
+
+}
+
+}
+);
+
+
+const {
+data:{
+session
+}
+}=await supabase
+.auth
+.getSession();
+
+
+if(session){
+
+document
+.getElementById('login')
+.classList.add('hidden');
+
+await loadPeople();
+
+}
+
+
+/* =========================================================
+   COMPARTIR INVITACIÓN COMO IMAGEN
+   No cambia el QR ni la credencial actual.
+   Usa automáticamente nombre, unidad, tipo, estado y código.
+   ========================================================= */
+window.shareInvitation=async function(){
+
+const qrImage=document.getElementById('qrimg');
+const name=document.getElementById('qrname').textContent.trim();
+const info=document.getElementById('qrun').textContent.trim();
+const backup=document.getElementById('qrcodebackup').textContent.trim();
+const status=document.getElementById('qrstatus').textContent.trim();
+
+if(!qrImage || !qrImage.src){
+alert('Primero debe generarse el código QR.');
+return;
+}
+
+const parts=info.split(' · ');
+const unit=(parts[0]||'').trim();
+const type=(parts.slice(1).join(' · ')||'').trim();
+const active=status.includes('AUTORIZADO') && !status.includes('NO AUTORIZADO');
+
+const canvas=document.createElement('canvas');
+canvas.width=1080;
+canvas.height=1600;
+const ctx=canvas.getContext('2d');
+
+// Fondo suave, inspirado en una invitación digital.
+const bg=ctx.createLinearGradient(0,0,0,1600);
+bg.addColorStop(0,'#e8f4ff');
+bg.addColorStop(.38,'#f8fbff');
+bg.addColorStop(1,'#e9f2fb');
+ctx.fillStyle=bg;
+ctx.fillRect(0,0,1080,1600);
+
+// Círculos decorativos superiores.
+ctx.fillStyle='rgba(53,126,199,.10)';
+ctx.beginPath();ctx.arc(80,90,240,0,Math.PI*2);ctx.fill();
+ctx.beginPath();ctx.arc(1010,150,300,0,Math.PI*2);ctx.fill();
+
+// Emblema Casa Mia.
+ctx.fillStyle='#2877bd';
+ctx.beginPath();ctx.arc(540,130,67,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#ffffff';
+ctx.textAlign='center';ctx.textBaseline='middle';
+ctx.font='bold 58px Arial';ctx.fillText('⌂',540,126);
+ctx.textBaseline='alphabetic';
+
+ctx.fillStyle='#64748b';ctx.font='bold 24px Arial';
+ctx.fillText('CONDOMINIO',540,235);
+ctx.fillStyle='#172033';ctx.font='bold 54px Arial';
+ctx.fillText('CASA MIA',540,295);
+ctx.fillStyle='#2877bd';ctx.font='bold 21px Arial';
+ctx.fillText('INVITACIÓN DIGITAL DE ACCESO',540,340);
+
+// Tarjeta blanca principal.
+ctx.save();
+ctx.shadowColor='rgba(15,35,60,.14)';ctx.shadowBlur=35;ctx.shadowOffsetY=12;
+roundedRect(ctx,85,390,910,1040,42);
+ctx.fillStyle='#ffffff';ctx.fill();ctx.restore();
+
+// Saludo, con ajuste automático si el nombre es largo.
+ctx.fillStyle='#172033';
+fitText(ctx,'¡Hola, '+name+'!',820,44,30,'bold');
+ctx.fillText('¡Hola, '+name+'!',540,485);
+
+ctx.fillStyle='#64748b';ctx.font='28px Arial';
+ctx.fillText('Tienes una autorización de acceso para',540,545);
+ctx.fillStyle='#172033';ctx.font='bold 34px Arial';
+ctx.fillText(unit || 'Condominio Casa Mia',540,595);
+if(type){
+ctx.fillStyle='#64748b';ctx.font='24px Arial';
+ctx.fillText(type,540,635);
+}
+
+// QR.
+const qr=new Image();
+qr.src=qrImage.src;
+await new Promise((resolve,reject)=>{qr.onload=resolve;qr.onerror=reject;});
+ctx.fillStyle='#ffffff';
+roundedRect(ctx,160,690,470,470,28);ctx.fill();
+ctx.strokeStyle='#172033';ctx.lineWidth=5;ctx.stroke();
+ctx.drawImage(qr,195,725,400,400);
+
+// Iniciales y código de respaldo.
+const initials=name.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w.charAt(0)).join('').toUpperCase() || 'CM';
+ctx.fillStyle='#2877bd';ctx.beginPath();ctx.arc(800,770,72,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#ffffff';ctx.font='bold 34px Arial';ctx.textBaseline='middle';ctx.fillText(initials,800,770);ctx.textBaseline='alphabetic';
+ctx.fillStyle='#64748b';ctx.font='bold 18px Arial';ctx.fillText('CÓDIGO DE RESPALDO',800,890);
+ctx.fillStyle='#172033';ctx.font='bold 34px Arial';ctx.fillText(backup,800,940);
+
+// Estado.
+ctx.fillStyle=active?'#16a34a':'#dc2626';
+ctx.font='bold 24px Arial';
+ctx.fillText(active?'● AUTORIZADO':'● NO AUTORIZADO',800,1000);
+
+// Instrucción.
+ctx.strokeStyle='#e2e8f0';ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(155,1210);ctx.lineTo(925,1210);ctx.stroke();
+ctx.fillStyle='#475569';ctx.font='26px Arial';
+ctx.fillText('Presenta este código QR al personal de seguridad',540,1270);
+ctx.fillText('para ingresar a Condominio Casa Mia.',540,1310);
+
+// Pie inferior.
+ctx.fillStyle='#64748b';ctx.font='bold 20px Arial';
+ctx.fillText('INVITACIÓN DE USO PERSONAL',540,1490);
+ctx.font='20px Arial';ctx.fillText('No compartir con terceros',540,1525);
+
+canvas.toBlob(async blob=>{
+if(!blob){alert('No se pudo crear la invitación.');return;}
+const safeName=(name||'acceso').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const file=new File([blob],'invitacion-'+safeName+'.png',{type:'image/png'});
+
+try{
+if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+await navigator.share({title:'Acceso · Condominio Casa Mia',text:'Invitación de acceso para '+name,files:[file]});
+return;
+}
+}catch(error){
+if(error?.name==='AbortError')return;
+console.error(error);
+}
+
+const url=URL.createObjectURL(blob);
+const link=document.createElement('a');
+link.href=url;link.download=file.name;
+document.body.appendChild(link);link.click();link.remove();
+setTimeout(()=>URL.revokeObjectURL(url),1500);
+alert('La invitación se guardó como imagen. Ya puede compartirla por WhatsApp.');
+},'image/png',1);
+};
+
+function roundedRect(ctx,x,y,w,h,r){
+const rr=Math.min(r,w/2,h/2);
+ctx.beginPath();ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath();
+}
+
+function fitText(ctx,text,maxWidth,startSize,minSize,weight='normal'){
+let size=startSize;
+while(size>minSize){ctx.font=`${weight} ${size}px Arial`;if(ctx.measureText(text).width<=maxWidth)break;size-=2;}
+ctx.font=`${weight} ${size}px Arial`;
+}
+
+</script>
+
+</body>
+</html>
