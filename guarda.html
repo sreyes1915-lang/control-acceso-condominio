@@ -3,174 +3,238 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Control de Acceso · Guarda</title>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box;
+}
 
 body{
-margin:0;
-font-family:Arial,system-ui,sans-serif;
-background:#0b1220;
-color:#fff;
-min-height:100vh
+  margin:0;
+  font-family:Arial,system-ui,sans-serif;
+  background:#0b1220;
+  color:#fff;
+  min-height:100vh;
 }
 
 header{
-padding:18px 20px;
-background:#111a2b;
-border-bottom:1px solid #26334a;
-display:flex;
-justify-content:space-between;
-align-items:center
+  padding:18px 20px;
+  background:#111a2b;
+  border-bottom:1px solid #26334a;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 main{
-max-width:560px;
-margin:auto;
-padding:22px 16px
+  max-width:560px;
+  margin:auto;
+  padding:22px 16px;
 }
 
 .card{
-background:#121b2b;
-border:1px solid #29364b;
-border-radius:18px;
-padding:20px
+  background:#121b2b;
+  border:1px solid #29364b;
+  border-radius:18px;
+  padding:20px;
 }
 
 button{
-border:0;
-border-radius:11px;
-padding:12px 15px;
-font-weight:800;
-cursor:pointer
+  border:0;
+  border-radius:11px;
+  padding:12px 15px;
+  font-weight:800;
+  cursor:pointer;
 }
 
 .primary{
-background:#2563eb;
-color:white
+  background:#2563eb;
+  color:white;
 }
 
 .secondary{
-background:#24324a;
-color:white
+  background:#24324a;
+  color:white;
 }
 
 input{
-width:100%;
-padding:13px;
-border-radius:10px;
-border:1px solid #35445d;
-background:#fff;
-color:#172033;
-margin-top:7px
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #35445d;
+  background:#fff;
+  color:#172033;
+  margin-top:7px;
+  font-size:16px;
 }
 
 video{
-width:100%;
-margin-top:15px;
-border-radius:15px;
-background:#000;
-min-height:260px
+  width:100%;
+  margin-top:15px;
+  border-radius:15px;
+  background:#000;
+  min-height:260px;
 }
 
 .hidden{
-display:none!important
+  display:none!important;
 }
 
 .result{
-margin-top:18px;
-padding:22px;
-border-radius:16px;
-text-align:center
+  margin-top:18px;
+  padding:22px;
+  border-radius:16px;
+  text-align:center;
 }
 
 .good{
-background:#052e16;
-border:2px solid #22c55e;
-color:#bbf7d0
+  background:#052e16;
+  border:2px solid #22c55e;
+  color:#bbf7d0;
 }
 
 .bad{
-background:#450a0a;
-border:2px solid #ef4444;
-color:#fecaca
+  background:#450a0a;
+  border:2px solid #ef4444;
+  color:#fecaca;
 }
 
 .login{
-position:fixed;
-inset:0;
-background:#0b1220;
-display:grid;
-place-items:center;
-padding:20px;
-z-index:10
+  position:fixed;
+  inset:0;
+  background:#0b1220;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  z-index:10;
 }
 
 .loginbox{
-width:min(420px,100%);
-background:#121b2b;
-border:1px solid #29364b;
-border-radius:18px;
-padding:25px
+  width:min(420px,100%);
+  background:#121b2b;
+  border:1px solid #29364b;
+  border-radius:18px;
+  padding:25px;
 }
 
 .muted{
-color:#a9b5c8;
-font-size:14px
+  color:#a9b5c8;
+  font-size:14px;
 }
+
+#manual{
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:5px;
+}
+
 </style>
+
 </head>
 
 <body>
 
+
+<!-- ==========================
+     ENCABEZADO
+========================== -->
+
 <header>
+
 <div>
-<strong>🛡️ Control de Acceso</strong>
-<div class="muted">Panel del Guarda</div>
+
+<strong>
+🛡️ Control de Acceso
+</strong>
+
+<div class="muted">
+Panel del Guarda
 </div>
 
-<button id="logout" class="secondary">Salir</button>
+</div>
+
+<button
+id="logout"
+class="secondary">
+Salir
+</button>
+
 </header>
+
+
+<!-- ==========================
+     PANEL DEL GUARDA
+========================== -->
 
 <main>
 
 <div class="card">
 
-<h2 style="margin-top:0">Validar acceso</h2>
+<h2 style="margin-top:0">
+Validar acceso
+</h2>
 
 <div class="muted">
 Escanee el QR o use el código de respaldo.
 </div>
 
+
+<!-- ESCANEAR QR -->
+
 <button
 id="scanBtn"
 class="primary"
 style="width:100%;margin-top:16px">
+
 📷 Escanear QR
+
 </button>
 
-<video id="video" class="hidden" autoplay playsinline></video>
+
+<video
+id="video"
+class="hidden"
+autoplay
+playsinline>
+</video>
+
+
+<!-- CÓDIGO DE RESPALDO -->
 
 <div style="margin-top:16px">
 
-<label>Código de respaldo</label>
+<label>
+Código de respaldo
+</label>
 
 <div style="display:flex;gap:8px">
 
 <input
 id="manual"
-maxlength="8"
-placeholder="Ej. A7F29C31"
-autocapitalize="characters">
+type="text"
+maxlength="4"
+inputmode="numeric"
+pattern="[0-9]*"
+placeholder="Ej. 2974"
+autocomplete="off">
 
-<button id="manualBtn" class="secondary">
+<button
+id="manualBtn"
+class="secondary">
+
 Validar
+
 </button>
 
 </div>
 
 </div>
+
+
+<!-- RESULTADO -->
 
 <div id="result"></div>
 
@@ -179,7 +243,13 @@ Validar
 </main>
 
 
-<div id="login" class="login">
+<!-- ==========================
+     LOGIN DEL GUARDA
+========================== -->
+
+<div
+id="login"
+class="login">
 
 <div class="loginbox">
 
@@ -191,6 +261,7 @@ Validar
 Ingrese la cuenta asignada al personal de seguridad.
 </div>
 
+
 <label style="display:block;margin-top:18px">
 Correo
 </label>
@@ -198,7 +269,9 @@ Correo
 <input
 id="email"
 type="email"
-placeholder="guarda@condominio.com">
+placeholder="guarda@condominio.com"
+autocomplete="username">
+
 
 <label style="display:block;margin-top:12px">
 Contraseña
@@ -207,14 +280,19 @@ Contraseña
 <input
 id="password"
 type="password"
-placeholder="Contraseña">
+placeholder="Contraseña"
+autocomplete="current-password">
+
 
 <button
 id="loginBtn"
 class="primary"
 style="width:100%;margin-top:16px">
+
 Entrar
+
 </button>
+
 
 <div
 id="loginMsg"
@@ -228,400 +306,1007 @@ style="margin-top:12px;color:#fca5a5">
 
 <script type="module">
 
+
+/* ==========================
+   SUPABASE
+========================== */
+
 import {
-createClient
+  createClient
 }
 from 'https://esm.sh/@supabase/supabase-js@2';
 
 
-const supabase=createClient(
+const supabase = createClient(
 
-'https://dbnjciqldjoospgmvlbq.supabase.co',
+  'https://dbnjciqldjoospgmvlbq.supabase.co',
 
-'sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo'
-
-);
-
-
-const login=document.getElementById('login');
-const video=document.getElementById('video');
-
-
-async function validate(value,isBackup=false){
-
-const input=String(value||'').trim();
-
-if(!input)return;
-
-let person=null;
-
-
-if(isBackup){
-
-const {
-data,
-error
-}=await supabase
-.from('authorized_people')
-.select('id,name,type,status,qr_token,units(name)');
-
-
-if(!error){
-
-person=(data||[]).find(
-
-p =>
-p.qr_token
-.replace(/-/g,'')
-.slice(0,8)
-.toUpperCase()
-===
-input.toUpperCase()
+  'sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo'
 
 );
 
+
+const login =
+document.getElementById('login');
+
+
+const video =
+document.getElementById('video');
+
+
+const manual =
+document.getElementById('manual');
+
+
+const resultBox =
+document.getElementById('result');
+
+
+
+/* ==================================================
+   CÓDIGO DE RESPALDO
+
+   IMPORTANTE:
+   ESTA ES LA MISMA FÓRMULA DEL INDEX.HTML
+================================================== */
+
+function backupCode(token){
+
+  const clean =
+  String(token || '')
+  .replace(/-/g,'')
+  .toLowerCase();
+
+
+  let hash =
+  2166136261;
+
+
+  for(const ch of clean){
+
+    hash ^=
+    ch.charCodeAt(0);
+
+
+    hash =
+    Math.imul(
+      hash,
+      16777619
+    );
+
+  }
+
+
+  return String(
+
+    (hash >>> 0)
+    %
+    10000
+
+  ).padStart(
+    4,
+    '0'
+  );
+
 }
 
-}else{
 
-const {
-data
-}=await supabase
-.from('authorized_people')
-.select('id,name,type,status,qr_token,units(name)')
-.eq('qr_token',input)
-.maybeSingle();
 
-if(data)person=data;
+/* ==========================
+   MOSTRAR ERROR
+========================== */
+
+function showError(message){
+
+  resultBox.innerHTML = `
+
+    <div class="result bad">
+
+      <h2 style="margin-top:0">
+
+        ✕ ACCESO DENEGADO
+
+      </h2>
+
+      <div>
+
+        ${message}
+
+      </div>
+
+    </div>
+
+  `;
 
 }
 
 
-if(person){
 
-person.unit=person.units?.name||'';
+/* ==========================
+   GUARDAR ACCESO
+========================== */
+
+async function saveLog(
+  person,
+  result
+){
+
+  const {
+    error
+  } = await supabase
+
+  .from('access_logs')
+
+  .insert({
+
+    person_id:
+    person?.id || null,
+
+    qr_token:
+    person?.qr_token || null,
+
+    result:
+    result,
+
+    guard_name:
+    'Guarda'
+
+  });
+
+
+  if(error){
+
+    console.error(
+      'Error guardando registro:',
+      error
+    );
+
+  }
 
 }
 
 
-const result=
-person && person.status==='Activo'
-?
-'AUTORIZADO'
-:
-'DENEGADO';
+
+/* ==========================
+   VALIDAR
+========================== */
+
+async function validate(
+  value,
+  isBackup=false
+){
+
+  const input =
+  String(value || '')
+  .trim();
 
 
-await supabase
-.from('access_logs')
-.insert({
+  if(!input){
 
-person_id:person?.id||null,
+    return;
 
-qr_token:person?.qr_token||null,
+  }
 
-result,
 
-guard_name:'Guarda'
+  let person =
+  null;
+
+
+
+  /* ==========================
+     CÓDIGO DE 4 DÍGITOS
+  ========================== */
+
+  if(isBackup){
+
+    const code =
+    input
+    .replace(/\D/g,'')
+    .slice(0,4);
+
+
+    if(code.length !== 4){
+
+      showError(
+        'Ingrese los 4 dígitos del código.'
+      );
+
+      return;
+
+    }
+
+
+    const {
+      data,
+      error
+    } = await supabase
+
+    .from('authorized_people')
+
+    .select(
+      'id,name,type,status,qr_token,units(name)'
+    );
+
+
+    if(error){
+
+      console.error(error);
+
+      showError(
+        'No se pudo consultar la base de datos.'
+      );
+
+      return;
+
+    }
+
+
+    /* BUSCAR EL MISMO CÓDIGO
+       QUE MUESTRA ADMINISTRACIÓN */
+
+    const matches =
+    (data || []).filter(
+
+      p =>
+      backupCode(
+        p.qr_token
+      )
+      ===
+      code
+
+    );
+
+
+    /* NO EXISTE */
+
+    if(matches.length === 0){
+
+      await saveLog(
+        null,
+        'DENEGADO'
+      );
+
+
+      showError(
+        'Código no encontrado.'
+      );
+
+      return;
+
+    }
+
+
+    /* SI DOS PERSONAS TIENEN
+       EL MISMO CÓDIGO */
+
+    if(matches.length > 1){
+
+      showError(
+        'Código duplicado. Escanee el QR.'
+      );
+
+      return;
+
+    }
+
+
+    person =
+    matches[0];
+
+  }
+
+
+  /* ==========================
+     VALIDAR QR
+  ========================== */
+
+  else{
+
+    const {
+      data,
+      error
+    } = await supabase
+
+    .from('authorized_people')
+
+    .select(
+      'id,name,type,status,qr_token,units(name)'
+    )
+
+    .eq(
+      'qr_token',
+      input
+    )
+
+    .maybeSingle();
+
+
+    if(error){
+
+      console.error(error);
+
+      showError(
+        'No se pudo validar el QR.'
+      );
+
+      return;
+
+    }
+
+
+    if(data){
+
+      person =
+      data;
+
+    }
+
+  }
+
+
+
+  /* ==========================
+     NO ENCONTRADO
+  ========================== */
+
+  if(!person){
+
+    await saveLog(
+      null,
+      'DENEGADO'
+    );
+
+
+    showError(
+      'QR o código no encontrado.'
+    );
+
+
+    return;
+
+  }
+
+
+
+  /* ==========================
+     UNIDAD
+  ========================== */
+
+  person.unit =
+  person.units?.name || '';
+
+
+
+  /* ==========================
+     ESTADO
+  ========================== */
+
+  const accessResult =
+
+  person.status === 'Activo'
+
+  ?
+
+  'AUTORIZADO'
+
+  :
+
+  'DENEGADO';
+
+
+
+  /* ==========================
+     GUARDAR REGISTRO
+  ========================== */
+
+  await saveLog(
+    person,
+    accessResult
+  );
+
+
+
+  /* ==========================
+     INACTIVO
+  ========================== */
+
+  if(
+    person.status !== 'Activo'
+  ){
+
+    resultBox.innerHTML = `
+
+      <div class="result bad">
+
+        <h2 style="margin-top:0">
+
+          ✕ ACCESO DENEGADO
+
+        </h2>
+
+
+        <div
+        style="
+        font-size:22px;
+        font-weight:900
+        ">
+
+          ${person.name}
+
+        </div>
+
+
+        <div style="margin-top:7px">
+
+          ${person.unit}
+          ·
+          ${person.type}
+
+        </div>
+
+
+        <div style="margin-top:15px">
+
+          La autorización está inactiva.
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    return;
+
+  }
+
+
+
+  /* ==========================
+     AUTORIZADO
+  ========================== */
+
+  resultBox.innerHTML = `
+
+    <div class="result good">
+
+      <h2 style="margin-top:0">
+
+        ✓ ACCESO AUTORIZADO
+
+      </h2>
+
+
+      <div
+      style="
+      font-size:24px;
+      font-weight:900
+      ">
+
+        ${person.name}
+
+      </div>
+
+
+      <div style="margin-top:6px">
+
+        ${person.unit}
+        ·
+        ${person.type}
+
+      </div>
+
+
+      <div
+      class="muted"
+      style="margin-top:10px">
+
+        ${new Date().toLocaleString()}
+
+      </div>
+
+
+      <div
+      style="
+      margin-top:14px;
+      font-size:14px
+      ">
+
+        Código:
+        <strong>
+
+          ${backupCode(
+            person.qr_token
+          )}
+
+        </strong>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+
+/* ==========================
+   SOLO PERMITIR NÚMEROS
+========================== */
+
+manual.addEventListener(
+'input',
+event=>{
+
+  event.target.value =
+  event.target.value
+
+  .replace(
+    /\D/g,
+    ''
+  )
+
+  .slice(
+    0,
+    4
+  );
 
 });
 
 
-const box=document.getElementById('result');
 
-
-if(!person){
-
-box.innerHTML=`
-
-<div class="result bad">
-
-<h2 style="margin-top:0">
-✕ ACCESO DENEGADO
-</h2>
-
-<div>
-QR o código no encontrado.
-</div>
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-if(person.status!=='Activo'){
-
-box.innerHTML=`
-
-<div class="result bad">
-
-<h2 style="margin-top:0">
-✕ ACCESO DENEGADO
-</h2>
-
-<strong>${person.name}</strong>
-
-<br>
-
-${person.unit} · ${person.type}
-
-<br><br>
-
-La autorización está inactiva.
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-box.innerHTML=`
-
-<div class="result good">
-
-<h2 style="margin-top:0">
-✓ ACCESO AUTORIZADO
-</h2>
-
-<div style="font-size:24px;font-weight:900">
-${person.name}
-</div>
-
-<div style="margin-top:6px">
-${person.unit} · ${person.type}
-</div>
-
-<div
-class="muted"
-style="margin-top:10px">
-
-${new Date().toLocaleString()}
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-document.getElementById('manualBtn').onclick=()=>{
-
-validate(
-document.getElementById('manual').value,
-true
-);
-
-};
-
+/* ==========================
+   BOTÓN VALIDAR
+========================== */
 
 document
-.getElementById('manual')
-.addEventListener('keydown',e=>{
+.getElementById('manualBtn')
+.onclick =
+()=>{
 
-if(e.key==='Enter'){
-
-validate(e.target.value,true);
-
-}
-
-});
-
-
-document.getElementById('scanBtn').onclick=async()=>{
-
-video.classList.remove('hidden');
-
-try{
-
-const stream=
-await navigator.mediaDevices.getUserMedia({
-
-video:{
-facingMode:'environment'
-},
-
-audio:false
-
-});
-
-
-video.srcObject=stream;
-
-
-const mod=
-await import(
-'https://esm.sh/jsqr@1.4.0'
-);
-
-
-const jsQR=
-mod.default||mod;
-
-
-const canvas=
-document.createElement('canvas');
-
-
-const ctx=
-canvas.getContext(
-'2d',
-{willReadFrequently:true}
-);
-
-
-const loop=async()=>{
-
-if(video.readyState>=2){
-
-canvas.width=video.videoWidth;
-
-canvas.height=video.videoHeight;
-
-
-ctx.drawImage(
-video,
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-const img=
-ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-const code=
-jsQR(
-img.data,
-img.width,
-img.height
-);
-
-
-if(code?.data){
-
-await validate(
-code.data,
-false
-);
-
-
-stream
-.getTracks()
-.forEach(t=>t.stop());
-
-
-video.classList.add('hidden');
-
-return;
-
-}
-
-}
-
-
-requestAnimationFrame(loop);
+  validate(
+    manual.value,
+    true
+  );
 
 };
 
 
-loop();
+
+/* ==========================
+   ENTER
+========================== */
+
+manual.addEventListener(
+'keydown',
+event=>{
+
+  if(
+    event.key === 'Enter'
+  ){
+
+    validate(
+      manual.value,
+      true
+    );
+
+  }
+
+});
 
 
-}catch(e){
 
-video.classList.add('hidden');
+/* ==========================
+   ESCANEAR QR
+========================== */
 
-alert(
-'No se pudo abrir la cámara. Use el código de respaldo.'
-);
+document
+.getElementById('scanBtn')
+.onclick =
+async()=>{
 
-}
+
+  resultBox.innerHTML =
+  '';
+
+
+  video
+  .classList
+  .remove('hidden');
+
+
+  try{
+
+
+    const stream =
+
+    await navigator
+    .mediaDevices
+    .getUserMedia({
+
+      video:{
+
+        facingMode:{
+          ideal:'environment'
+        }
+
+      },
+
+      audio:false
+
+    });
+
+
+
+    video.srcObject =
+    stream;
+
+
+    await video.play();
+
+
+
+    const module =
+
+    await import(
+      'https://esm.sh/jsqr@1.4.0'
+    );
+
+
+    const jsQR =
+
+    module.default
+    ||
+    module;
+
+
+
+    const canvas =
+
+    document
+    .createElement(
+      'canvas'
+    );
+
+
+    const context =
+
+    canvas
+    .getContext(
+      '2d',
+      {
+        willReadFrequently:true
+      }
+    );
+
+
+
+    let scanning =
+    true;
+
+
+
+    const scan =
+    async()=>{
+
+
+      if(!scanning){
+
+        return;
+
+      }
+
+
+
+      if(
+        video.readyState >= 2
+      ){
+
+
+        canvas.width =
+        video.videoWidth;
+
+
+        canvas.height =
+        video.videoHeight;
+
+
+
+        context.drawImage(
+
+          video,
+
+          0,
+          0,
+
+          canvas.width,
+          canvas.height
+
+        );
+
+
+
+        const image =
+
+        context.getImageData(
+
+          0,
+          0,
+
+          canvas.width,
+          canvas.height
+
+        );
+
+
+
+        const code =
+
+        jsQR(
+
+          image.data,
+
+          image.width,
+
+          image.height
+
+        );
+
+
+
+        if(
+          code?.data
+        ){
+
+
+          scanning =
+          false;
+
+
+          stream
+          .getTracks()
+          .forEach(
+
+            track =>
+            track.stop()
+
+          );
+
+
+          video
+          .classList
+          .add(
+            'hidden'
+          );
+
+
+          await validate(
+
+            code.data,
+
+            false
+
+          );
+
+
+          return;
+
+        }
+
+      }
+
+
+      requestAnimationFrame(
+        scan
+      );
+
+    };
+
+
+    scan();
+
+
+  }catch(error){
+
+
+    console.error(error);
+
+
+    video
+    .classList
+    .add(
+      'hidden'
+    );
+
+
+    alert(
+
+      'No se pudo abrir la cámara. Revise el permiso de cámara o utilice el código de respaldo.'
+
+    );
+
+  }
 
 };
 
 
-document.getElementById('loginBtn').onclick=async()=>{
 
-const email=
-document.getElementById('email')
-.value
-.trim();
+/* ==========================
+   LOGIN DEL GUARDA
+========================== */
 
-
-const password=
-document.getElementById('password')
-.value;
+document
+.getElementById('loginBtn')
+.onclick =
+async()=>{
 
 
-const msg=
-document.getElementById('loginMsg');
+  const email =
+
+  document
+  .getElementById('email')
+  .value
+  .trim();
 
 
-msg.textContent='Conectando...';
+  const password =
 
+  document
+  .getElementById('password')
+  .value;
+
+
+  const message =
+
+  document
+  .getElementById('loginMsg');
+
+
+  if(
+    !email
+    ||
+    !password
+  ){
+
+    message.textContent =
+
+    'Ingrese el correo y la contraseña.';
+
+    return;
+
+  }
+
+
+  message.textContent =
+
+  'Conectando...';
+
+
+
+  const {
+    error
+  } =
+
+  await supabase
+  .auth
+  .signInWithPassword({
+
+    email,
+    password
+
+  });
+
+
+
+  if(error){
+
+    message.textContent =
+
+    'Correo o contraseña incorrectos.';
+
+    return;
+
+  }
+
+
+  message.textContent =
+  '';
+
+
+  login
+  .classList
+  .add(
+    'hidden'
+  );
+
+};
+
+
+
+/* ==========================
+   ENTER EN CONTRASEÑA
+========================== */
+
+document
+.getElementById('password')
+.addEventListener(
+'keydown',
+event=>{
+
+  if(
+    event.key === 'Enter'
+  ){
+
+    document
+    .getElementById('loginBtn')
+    .click();
+
+  }
+
+});
+
+
+
+/* ==========================
+   COMPROBAR SESIÓN
+========================== */
 
 const {
-error
-}=
-await supabase.auth.signInWithPassword({
+  data:{
+    session
+  }
+} =
 
-email,
-password
+await supabase
+.auth
+.getSession();
 
-});
-
-
-if(error){
-
-msg.textContent=
-'Correo o contraseña incorrectos.';
-
-return;
-
-}
-
-
-login.classList.add('hidden');
-
-};
-
-
-const {
-data:{session}
-}=
-await supabase.auth.getSession();
 
 
 if(session){
 
-login.classList.add('hidden');
+  login
+  .classList
+  .add(
+    'hidden'
+  );
 
 }
 
 
-document.getElementById('logout').onclick=async()=>{
 
-await supabase.auth.signOut();
+/* ==========================
+   CERRAR SESIÓN
+========================== */
 
-login.classList.remove('hidden');
+document
+.getElementById('logout')
+.onclick =
+async()=>{
+
+
+  await supabase
+  .auth
+  .signOut();
+
+
+  resultBox.innerHTML =
+  '';
+
+
+  manual.value =
+  '';
+
+
+  login
+  .classList
+  .remove(
+    'hidden'
+  );
 
 };
+
 
 </script>
 
