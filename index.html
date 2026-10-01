@@ -1,48 +1,1381 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Control de Acceso</title>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Control de Acceso</title>
+
 <style>
-:root{color-scheme:light dark;--bg:light-dark(#f4f7fb,#0b1220);--surface:light-dark(#fff,#121b2b);--text:light-dark(#172033,#f4f7fb);--muted:light-dark(#667085,#a9b5c8);--border:light-dark(#dfe5ee,#29364b);--accent:#2563eb}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial}#app{min-height:100vh;background:var(--bg)}
-header{padding:22px 28px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center}.brand{display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:white;font-weight:800}h1,h2,p{margin:0}main{max-width:1100px;margin:auto;padding:28px}
-nav{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}button{border:1px solid var(--border);background:var(--surface);color:var(--text);padding:11px 15px;border-radius:10px;cursor:pointer;font-weight:650}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button.active{background:var(--accent);color:white;border-color:var(--accent)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px}.stat{font-size:30px;font-weight:800;margin-top:8px}.muted{color:var(--muted);font-size:14px}.row{display:flex;justify-content:space-between;gap:12px;align-items:center}
-table{width:100%;border-collapse:collapse;margin-top:14px}th,td{padding:13px 10px;border-bottom:1px solid var(--border);text-align:left}.pill{padding:5px 9px;border-radius:99px;font-size:12px;font-weight:750}.good{background:#dcfce7;color:#166534}.bad{background:#fee2e2;color:#991b1b}
-input,select{width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text);margin-top:6px}label{font-size:13px;font-weight:700}.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
-.qrbox{display:flex;flex-direction:column;align-items:center;gap:12px}.qrbox img{width:220px;height:220px;border-radius:8px}.scanner{max-width:520px;margin:auto;text-align:center}video{width:100%;border-radius:16px;background:#000;margin:16px 0;min-height:280px}.result{margin-top:16px;padding:18px;border-radius:14px;text-align:left}.goodbox{background:#ecfdf3;border:2px solid #22c55e;color:#14532d}.badbox{background:#fef2f2;border:2px solid #ef4444;color:#7f1d1d}.hidden{display:none}.smallbtn{padding:7px 9px;font-size:12px}
-@media(max-width:650px){main{padding:18px}.form{grid-template-columns:1fr}.full{grid-column:auto}header{padding:18px}table{font-size:13px}}
-</style></head><body><div id="app"><header><div class="brand"><div class="logo">QR</div><div><h1>Control de Acceso</h1><div class="muted">Condominio · autorización digital</div></div></div><div class="muted">Panel administrativo</div></header><main>
-<nav><button class="active" onclick="show('dash',this)">Resumen</button><button onclick="show('people',this)">Autorizados</button><button onclick="show('guard',this)">Modo Guarda</button></nav>
-<section id="dash"><div class="grid"><div class="card"><div class="muted">Personas registradas</div><div class="stat" id="count">0</div></div><div class="card"><div class="muted">Autorizaciones activas</div><div class="stat" id="active">0</div></div><div class="card"><div class="muted">Último acceso</div><div class="stat" style="font-size:18px" id="last">Sin registros</div></div></div><div class="card" style="margin-top:18px"><h2>Cómo funciona</h2><p class="muted" style="margin-top:10px;line-height:1.6">1. Administración registra a la persona. 2. Se genera un QR único. 3. El residente lo muestra al guarda. 4. El guarda escanea y recibe una respuesta verde o roja.</p></div></section>
-<section id="people" class="hidden"><div class="row"><div><h2>Personas autorizadas</h2><div class="muted">Administra quién puede ingresar.</div></div><button class="primary" onclick="newPerson()">+ Agregar persona</button></div><div class="card" style="margin-top:16px;overflow:auto"><table><thead><tr><th>Nombre</th><th>Unidad</th><th>Tipo</th><th>Estado</th><th></th></tr></thead><tbody id="tbody"></tbody></table></div></section>
-<section id="guard" class="hidden"><div class="scanner"><h2>Modo Guarda</h2><p class="muted" style="margin-top:8px">Apunte la cámara al QR. Si la cámara no está disponible, escriba el código.</p><button class="primary" style="margin-top:16px" onclick="startScan()">📷 Activar cámara</button><video id="video" class="hidden" autoplay playsinline></video><div style="display:flex;gap:8px;margin-top:10px"><input id="manual" placeholder="Ej. CON-001"><button onclick="validate(document.getElementById('manual').value)">Validar</button></div><div id="result"></div></div></section>
-<section id="form" class="hidden"><div class="card"><div class="row"><div><h2>Nueva persona</h2><div class="muted">El QR se genera automáticamente.</div></div><button onclick="show('people')">Cancelar</button></div><form onsubmit="savePerson(event)" style="margin-top:20px"><div class="form"><div><label>Nombre completo</label><input id="name" required></div><div><label>Casa / apartamento</label><input id="unit" required></div><div><label>Tipo</label><select id="type"><option>Residente</option><option>Familiar</option><option>Visitante frecuente</option><option>Proveedor</option></select></div><div><label>Estado</label><select id="status"><option>Activo</option><option>Inactivo</option></select></div><div class="full"><button class="primary" type="submit">Guardar autorización</button></div></div></form></div></section>
-<section id="qr" class="hidden"><div class="card"><div class="row"><div><h2>Credencial QR</h2><div class="muted">El autorizado puede mostrar esta pantalla desde su teléfono.</div></div><button onclick="show('people')">Volver</button></div><div class="qrbox" style="margin-top:22px"><h2 id="qrname"></h2><div class="muted" id="qrun"></div><img id="qrimg"><strong id="qrstatus"></strong><button class="primary" onclick="window.print()">🖨 Imprimir / Guardar</button></div></div></section>
-</main></div>
+:root{
+color-scheme:light dark;
+--bg:light-dark(#f4f7fb,#0b1220);
+--surface:light-dark(#fff,#121b2b);
+--text:light-dark(#172033,#f4f7fb);
+--muted:light-dark(#667085,#a9b5c8);
+--border:light-dark(#dfe5ee,#29364b);
+--accent:#2563eb
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:Inter,system-ui,Arial
+}
+
+#app{
+min-height:100vh;
+background:var(--bg)
+}
+
+header{
+padding:22px 28px;
+border-bottom:1px solid var(--border);
+background:var(--surface);
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.brand{
+display:flex;
+gap:12px;
+align-items:center
+}
+
+.logo{
+width:42px;
+height:42px;
+border-radius:12px;
+background:var(--accent);
+display:grid;
+place-items:center;
+color:white;
+font-weight:800
+}
+
+h1,h2,p{margin:0}
+
+main{
+max-width:1100px;
+margin:auto;
+padding:28px
+}
+
+nav{
+display:flex;
+gap:8px;
+margin-bottom:24px;
+flex-wrap:wrap
+}
+
+button{
+border:1px solid var(--border);
+background:var(--surface);
+color:var(--text);
+padding:11px 15px;
+border-radius:10px;
+cursor:pointer;
+font-weight:650
+}
+
+button.primary{
+background:var(--accent);
+color:white;
+border-color:var(--accent)
+}
+
+button.active{
+background:var(--accent);
+color:white;
+border-color:var(--accent)
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:16px
+}
+
+.card{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:16px;
+padding:20px
+}
+
+.stat{
+font-size:30px;
+font-weight:800;
+margin-top:8px
+}
+
+.muted{
+color:var(--muted);
+font-size:14px
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:12px;
+align-items:center
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:14px
+}
+
+th,td{
+padding:13px 10px;
+border-bottom:1px solid var(--border);
+text-align:left
+}
+
+.pill{
+padding:5px 9px;
+border-radius:99px;
+font-size:12px;
+font-weight:750
+}
+
+.good{
+background:#dcfce7;
+color:#166534
+}
+
+.bad{
+background:#fee2e2;
+color:#991b1b
+}
+
+input,select{
+width:100%;
+padding:12px;
+border:1px solid var(--border);
+border-radius:10px;
+background:var(--surface);
+color:var(--text);
+margin-top:6px
+}
+
+label{
+font-size:13px;
+font-weight:700
+}
+
+.form{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px
+}
+
+.full{
+grid-column:1/-1
+}
+
+.qrbox{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:12px
+}
+
+.qrbox img{
+width:220px;
+height:220px;
+border-radius:8px
+}
+
+.scanner{
+max-width:520px;
+margin:auto;
+text-align:center
+}
+
+video{
+width:100%;
+border-radius:16px;
+background:#000;
+margin:16px 0;
+min-height:280px
+}
+
+.result{
+margin-top:16px;
+padding:18px;
+border-radius:14px;
+text-align:left
+}
+
+.goodbox{
+background:#ecfdf3;
+border:2px solid #22c55e;
+color:#14532d
+}
+
+.badbox{
+background:#fef2f2;
+border:2px solid #ef4444;
+color:#7f1d1d
+}
+
+.hidden{
+display:none
+}
+
+.smallbtn{
+padding:7px 9px;
+font-size:12px
+}
+
+@media(max-width:650px){
+main{padding:18px}
+.form{grid-template-columns:1fr}
+.full{grid-column:auto}
+header{padding:18px}
+table{font-size:13px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<header>
+<div class="brand">
+<div class="logo">QR</div>
+<div>
+<h1>Control de Acceso</h1>
+<div class="muted">Condominio · autorización digital</div>
+</div>
+</div>
+
+<div class="muted">Panel administrativo</div>
+</header>
+
+<main>
+
+<nav>
+<button class="active" onclick="show('dash',this)">Resumen</button>
+<button onclick="show('people',this)">Autorizados</button>
+<button onclick="show('guard',this)">Modo Guarda</button>
+</nav>
+
+<section id="dash">
+
+<div class="grid">
+
+<div class="card">
+<div class="muted">Personas registradas</div>
+<div class="stat" id="count">0</div>
+</div>
+
+<div class="card">
+<div class="muted">Autorizaciones activas</div>
+<div class="stat" id="active">0</div>
+</div>
+
+<div class="card">
+<div class="muted">Último acceso</div>
+<div class="stat" style="font-size:18px" id="last">
+Sin registros
+</div>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:18px">
+
+<h2>Cómo funciona</h2>
+
+<p class="muted" style="margin-top:10px;line-height:1.6">
+1. Administración registra a la persona.
+2. Se genera un QR único.
+3. El residente lo muestra al guarda.
+4. El guarda escanea y recibe una respuesta verde o roja.
+</p>
+
+</div>
+
+</section>
+
+
+<section id="people" class="hidden">
+
+<div class="row">
+
+<div>
+<h2>Personas autorizadas</h2>
+<div class="muted">
+Administra quién puede ingresar.
+</div>
+</div>
+
+<button class="primary" onclick="newPerson()">
++ Agregar persona
+</button>
+
+</div>
+
+<div class="card" style="margin-top:16px;overflow:auto">
+
+<table>
+
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Unidad</th>
+<th>Tipo</th>
+<th>Estado</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="tbody"></tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<section id="guard" class="hidden">
+
+<div class="scanner">
+
+<h2>Modo Guarda</h2>
+
+<p class="muted" style="margin-top:8px">
+Apunte la cámara al QR. Si la cámara no está disponible,
+escriba el código.
+</p>
+
+<button
+class="primary"
+style="margin-top:16px"
+onclick="startScan()">
+📷 Activar cámara
+</button>
+
+<video
+id="video"
+class="hidden"
+autoplay
+playsinline>
+</video>
+
+<div style="display:flex;gap:8px;margin-top:10px">
+
+<input
+id="manual"
+placeholder="Pegue aquí el código QR">
+
+<button onclick="validate(document.getElementById('manual').value)">
+Validar
+</button>
+
+</div>
+
+<div id="result"></div>
+
+</div>
+
+</section>
+
+
+<section id="form" class="hidden">
+
+<div class="card">
+
+<div class="row">
+
+<div>
+<h2>Nueva persona</h2>
+
+<div class="muted">
+El QR se genera automáticamente.
+</div>
+
+</div>
+
+<button onclick="show('people')">
+Cancelar
+</button>
+
+</div>
+
+
+<form
+onsubmit="savePerson(event)"
+style="margin-top:20px">
+
+<div class="form">
+
+<div>
+
+<label>Nombre completo</label>
+
+<input
+id="name"
+required>
+
+</div>
+
+
+<div>
+
+<label>Casa / apartamento</label>
+
+<input
+id="unit"
+required>
+
+</div>
+
+
+<div>
+
+<label>Tipo</label>
+
+<select id="type">
+
+<option>Residente</option>
+<option>Familiar</option>
+<option>Visitante frecuente</option>
+<option>Proveedor</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>Estado</label>
+
+<select id="status">
+
+<option>Activo</option>
+<option>Inactivo</option>
+
+</select>
+
+</div>
+
+
+<div class="full">
+
+<button
+class="primary"
+type="submit">
+
+Guardar autorización
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+
+<section id="qr" class="hidden">
+
+<div class="card">
+
+<div class="row">
+
+<div>
+
+<h2>Credencial QR</h2>
+
+<div class="muted">
+El autorizado puede mostrar esta pantalla desde su teléfono.
+</div>
+
+</div>
+
+<button onclick="show('people')">
+Volver
+</button>
+
+</div>
+
+
+<div
+class="qrbox"
+style="margin-top:22px">
+
+<h2 id="qrname"></h2>
+
+<div class="muted" id="qrun"></div>
+
+<img id="qrimg">
+
+<strong id="qrstatus"></strong>
+
+<button
+class="primary"
+onclick="window.print()">
+
+🖨 Imprimir / Guardar
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
 <script>
-const initial=[{"id": "CON-001", "name": "Santiago Reyes", "unit": "Casa 24", "type": "Residente", "status": "Activo", "qr": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASIAAAEiAQAAAAB1xeIbAAABhUlEQVR4nO2ZwW2EMBRE3w9IOXqlFJBScAcpKa1BKdsBPq5ENDlgsyRRlBzCegPfB0uYJzEyY/M9mPi5DQ+/gMApp5xyyql7pyy3FgZrgVRGYlVdh6A6SdIIFsOERRpJkj5St9d1CCplj0tnMwDmZVBb156p9vPAEEGk7Z7o1HeUxSBZvOETj0sV3wcBCa5HrfWh617V74IazMzsBBZTC/A2lzm1de2amn2/cvtwwvIyqKnrOJTF1FIsD+oBi7y577ekmOt4jY3UB2l9udzt71X9/6bm2aUbgW4sJ6ruOuZzvxm11PfNZISLifQ05Q5htXQdgSq7CnmXBxrRjU0xv/t+Mwp9bBAm1Icpvwqf+62pa46ZzZ/avP33VXXtmyrf2qW60QgQJiD4nnMTquSYFgH1qUU6e465KfU5xxQIuvEEw8vFVEvXEakc6gTJXs+PJdGsr2uP1Jccc3iBub4fni+eKWxJsf41yFLVj+si37+121BfcszcTUtXR5dTTjnllFN/S70DWy7tljs1UPIAAAAASUVORK5CYII="}, {"id": "CON-002", "name": "María González", "unit": "Casa 18", "type": "Familiar", "status": "Activo", "qr": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASIAAAEiAQAAAAB1xeIbAAABi0lEQVR4nO2ZTW6DQAyFPxekLKdSD5CjwA165eEouQEsI1G9LoYhJFHVbPgJeBaR4vkknowx5o2J/1fz8QIETjnllFNObZ2yYZXQWAl0OVKvqusQVCVJagHC1aymkCTpnlpe1yGobqzxrkyR9BisrWvPVPkUCS3QzXdFp/6kqkuJ1Ute8fBUkBQBq/kxACT16+vaMzX0nCbluwAoeiPfgNV0HYFKub8ZC2rOV4NwbzVsVf17U6RRslKPIoWAQoqhTxtpxa2qf2+KPMaPGW8LpZ+Ydz3381C57tu7vwSlG5A+ujz3s1C5sscmEycx7zmzUtOek9pNegyGkve6n5GavlJvb91htPeeswB18zEVu5NoPkFxfV37poZvqyoCdF8Y4WoQwJKzs5KuI1HZx1TsSqRLCdXF7IFaXteeqUcfc8h26EtBn3e3qn5flNQWsppCVncnPzuZk8qVHURy7ZvvHjUGas7uY85KjfM9MAyVfTpChHxw6DPmPNSTj0ky1Kax7ap3yimnnHLqVeoXDkEBkKFGhjAAAAAASUVORK5CYII="}, {"id": "CON-003", "name": "Carlos Pérez", "unit": "Casa 31", "type": "Visitante frecuente", "status": "Inactivo", "qr": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASIAAAEiAQAAAAB1xeIbAAABjUlEQVR4nO2aS26DMBRFzyuWOjRSFmS23B3AUrKASngYCXQ7wIR8qjYTAnHMAPlzJK7M431sTPx/dR8PQFCoQhWqUIXaO2XpcpjVYE2cR5pNdb0FFSRJPUj9aEAlSdI19Xxdb0HFZOPWzDNm5rbXlTPlbvrq6l625hML9Qc13i39PnRlR8127wVEMHwauSy69qo+C6ozM7MaCMdPAeOU5mytK2tqsvvFxkWE9Blsqet9KGuiA2IydLWMBtFhzaa68qaY8nj1AF5S6wfUAlKfkny1e1X/2tR57SuppTq/hQGg0lR0lbVfk+rq0Qg6GV0NaqNDrT+VWLsmdc4xv50BXN78mdqr+iyoMPv2pSVN2eamurKmJruffUs1pEY8DHQNpq10vQNFsvYl4PrUJWigxNoVqdnfxxrCV+qIeBjULfs6e1X/2tTtPiahH526poKw1LZ7VZ8Xlc6t/KmcWz2N8lKqZo9uyu8np7+1rpwpLo8GqUTor6ZLrF2Put/H5Je/pfaqvlCFKlShCvUo9QMabMJyGnid2gAAAABJRU5ErkJggg=="}];
-let people=JSON.parse(localStorage.getItem('condoPeople')||'null')||initial;
-function persist(){localStorage.setItem('condoPeople',JSON.stringify(people));render()}
-function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(btn){document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}render()}
-function render(){document.getElementById('count').textContent=people.length;document.getElementById('active').textContent=people.filter(p=>p.status==='Activo').length;let tb=document.getElementById('tbody');if(!tb)return;tb.innerHTML=people.map(p=>`<tr><td><b>${p.name}</b><div class="muted">${p.id}</div></td><td>${p.unit}</td><td>${p.type}</td><td><span class="pill ${p.status==='Activo'?'good':'bad'}">${p.status}</span></td><td><button class="smallbtn" onclick="viewQR('${p.id}')">QR</button> <button class="smallbtn" onclick="toggle('${p.id}')">${p.status==='Activo'?'Desactivar':'Activar'}</button></td></tr>`).join('')}
-function newPerson(){document.getElementById('name').value='';document.getElementById('unit').value='';document.getElementById('status').value='Activo';show('form')}
-function savePerson(e){e.preventDefault();let id='CON-'+String(Date.now()).slice(-6);let p={id,name:document.getElementById('name').value.trim(),unit:document.getElementById('unit').value.trim(),type:document.getElementById('type').value,status:document.getElementById('status').value,qr:null};let temp=document.createElement('canvas');let old=people;/* QR will be assigned from a small built-in generator below */p.qr=makeQRData(id);people.push(p);persist();viewQR(id)}
-function makeQRData(id){return qrMap[id]||''}
-function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(btn){document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}render()} function render(){document.getElementById('count').textContent=people.length;document.getElementById('active').textContent=people.filter(p=>p.status==='Activo').length;let tb=document.getElementById('tbody');if(!tb)return;tb.innerHTML=people.map(p=>`<tr><td><b>${p.name}</b><div class="muted">${p.id}</div></td><td>${p.unit}</td><td>${p.type}</td><td><span class="pill ${p.status==='Activo'?'good':'bad'}">${p.status}</span></td><td><button class="smallbtn" onclick="viewQR('${p.id}')">QR</button> <button class="smallbtn" onclick="toggle('${p.id}')">${p.status==='Activo'?'Desactivar':'Activar'}</button></td></tr>`).join('')} function newPerson(){document.getElementById('name').value='';document.getElementById('unit').value='';document.getElementById('status').value='Activo';show('form')} function savePerson(e){e.preventDefault();let id='CON-'+String(Date.now()).slice(-6);let p={id,name:document.getElementById('name').value.trim(),unit:document.getElementById('unit').value.trim(),type:document.getElementById('type').value,status:document.getElementById('status').value,qr:''};people.push(p);persist();viewQR(id)} function toggle(id){people=people.map(p=>p.id===id?{...p,status:p.status==='Activo'?'Inactivo':'Activo'}:p);persist()} function viewQR(id){let p=people.find(x=>x.id===id);if(!p)return;document.getElementById('qrname').textContent=p.name;document.getElementById('qrun').textContent=p.unit+' · '+p.id;document.getElementById('qrimg').alt=p.id;document.getElementById('qrimg').src='';document.getElementById('qrstatus').textContent=p.status==='Activo'?'● AUTORIZADO':'● NO AUTORIZADO';document.getElementById('qrstatus').style.color=p.status==='Activo'?'#16a34a':'#dc2626';show('qr')} function validate(id){let p=people.find(x=>x.id===id.trim());let box=document.getElementById('result');if(!p){box.innerHTML='<div class="result badbox"><b>✕ NO AUTORIZADO</b><br><span class="muted">Código no encontrado.</span></div>';return}if(p.status!=='Activo'){box.innerHTML=`<div class="result badbox"><b>✕ ACCESO DENEGADO</b><br>${p.name} · ${p.unit}<br><span class="muted">La autorización está inactiva.</span></div>`;return}document.getElementById('last').textContent=p.name+' · '+new Date().toLocaleTimeString();box.innerHTML=`<div class="result goodbox"><b>✓ ACCESO AUTORIZADO</b><br><strong>${p.name}</strong><br>${p.unit} · ${p.type}<br><span class="muted">Código: ${p.id} · ${new Date().toLocaleString()}</span></div>`} async function startScan(){let video=document.getElementById('video');video.classList.remove('hidden');try{let stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});video.srcObject=stream;if('BarcodeDetector' in window){let detector=new BarcodeDetector({formats:['qr_code']});let loop=async()=>{if(video.readyState>=2){try{let codes=await detector.detect(video);if(codes[0]?.rawValue){validate(codes[0].rawValue);stream.getTracks().forEach(t=>t.stop());video.classList.add('hidden');return}}catch(e){}}requestAnimationFrame(loop)};loop()}else{alert('Este navegador no soporta escaneo QR automático. Use el campo de código.')}}catch(e){alert('No se pudo acceder a la cámara. Puede validar escribiendo el código.')}} render();
-function toggle(id){people=people.map(p=>p.id===id?{...p,status:p.status==='Activo'?'Inactivo':'Activo'}:p);persist()}
-function viewQR(id){let p=people.find(x=>x.id===id);if(!p)return;document.getElementById('qrname').textContent=p.name;document.getElementById('qrun').textContent=p.unit+' · '+p.id;document.getElementById('qrimg').src=p.qr;document.getElementById('qrstatus').textContent=p.status==='Activo'?'● AUTORIZADO':'● NO AUTORIZADO';document.getElementById('qrstatus').style.color=p.status==='Activo'?'#16a34a':'#dc2626';show('qr')}
-function validate(id){let p=people.find(x=>x.id===id.trim());let box=document.getElementById('result');if(!p){box.innerHTML='<div class="result badbox"><b>✕ NO AUTORIZADO</b><br><span class="muted">Código no encontrado.</span></div>';return}if(p.status!=='Activo'){box.innerHTML=`<div class="result badbox"><b>✕ ACCESO DENEGADO</b><br>${p.name} · ${p.unit}<br><span class="muted">La autorización está inactiva.</span></div>`;return}document.getElementById('last').textContent=p.name+' · '+new Date().toLocaleTimeString();box.innerHTML=`<div class="result goodbox"><b>✓ ACCESO AUTORIZADO</b><br><strong>${p.name}</strong><br>${p.unit} · ${p.type}<br><span class="muted">Código: ${p.id} · ${new Date().toLocaleString()}</span></div>`}
-async function startScan(){let video=document.getElementById('video');video.classList.remove('hidden');try{let stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});video.srcObject=stream;if('BarcodeDetector' in window){let detector=new BarcodeDetector({formats:['qr_code']});let loop=async()=>{if(video.readyState>=2){try{let codes=await detector.detect(video);if(codes[0]?.rawValue){validate(codes[0].rawValue);stream.getTracks().forEach(t=>t.stop());video.classList.add('hidden');return}}catch(e){}}requestAnimationFrame(loop)};loop()}else{alert('Este navegador no soporta escaneo QR automático. Use el campo de código.')}}catch(e){alert('No se pudo acceder a la cámara. Puede validar escribiendo el código.')}}
- render();
- (async()=>{const {createClient}=await import('https://esm.sh/@supabase/supabase-js@2');const QR=await import('https://esm.sh/qrcode@1.5.4');const client=createClient('https://dbnjciqldjoospgmvlbq.supabase.co','sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo');let cloudPeople=[];
- const overlay=document.createElement('div');overlay.style='position:fixed;inset:0;background:#0b1220;display:none;place-items:center;z-index:9999;padding:20px';overlay.innerHTML='<div style="width:min(420px,100%);background:#121b2b;border:1px solid #29364b;border-radius:18px;padding:28px;color:#f4f7fb"><h2 style="margin:0 0 8px">🔐 Iniciar sesión</h2><p style="color:#a9b5c8;margin:0 0 20px">Panel de administración del condominio</p><label>Correo</label><input id="authEmail" type="email" placeholder="admin@condominio.com" autocomplete="username"><label style="display:block;margin-top:12px">Contraseña</label><input id="authPass" type="password" placeholder="Contraseña" autocomplete="current-password"><button id="authBtn" class="primary" style="width:100%;margin-top:16px">Entrar</button><div id="authMsg" style="margin-top:12px;color:#fca5a5;font-size:14px"></div></div>';document.body.appendChild(overlay);
- async function load(){const {data,error}=await client.from('authorized_people').select('id,name,type,status,qr_token,unit_id,created_at,units(name)').order('created_at',{ascending:false});if(error){alert('Error al cargar datos: '+error.message);return}cloudPeople=(data||[]).map(p=>({...p,unit:p.units?.name||''}));renderCloud()}
- function renderCloud(){document.getElementById('count').textContent=cloudPeople.length;document.getElementById('active').textContent=cloudPeople.filter(p=>p.status==='Activo').length;const tb=document.getElementById('tbody');if(!tb)return;tb.innerHTML=cloudPeople.map(p=>`<tr><td><b>${p.name}</b><div class="muted">QR: ${p.qr_token.slice(0,8)}…</div></td><td>${p.unit}</td><td>${p.type}</td><td><span class="pill ${p.status==='Activo'?'good':'bad'}">${p.status}</span></td><td><button class="smallbtn" onclick="viewQR('${p.id}')">QR</button> <button class="smallbtn" onclick="toggle('${p.id}')">${p.status==='Activo'?'Desactivar':'Activar'}</button></td></tr>`).join('')}
- window.savePerson=async function(e){e.preventDefault();const name=document.getElementById('name').value.trim(),unitName=document.getElementById('unit').value.trim(),type=document.getElementById('type').value,status=document.getElementById('status').value;if(!name||!unitName)return;const {data:u,error:ue}=await client.from('units').upsert({name:unitName},{onConflict:'name'}).select().single();if(ue){alert('No se pudo guardar la casa/apartamento: '+ue.message);return}const {data:p,error}=await client.from('authorized_people').insert({name,unit_id:u.id,type,status}).select('id,name,type,status,qr_token,unit_id,created_at,units(name)').single();if(error){alert('No se pudo guardar la persona: '+error.message);return}cloudPeople.unshift({...p,unit:p.units?.name||unitName});renderCloud();window.viewQR(p.id)};
- window.toggle=async function(id){const p=cloudPeople.find(x=>x.id===id);if(!p)return;const status=p.status==='Activo'?'Inactivo':'Activo';const {error}=await client.from('authorized_people').update({status,updated_at:new Date().toISOString()}).eq('id',id);if(error){alert('No se pudo cambiar el estado: '+error.message);return}await load()};
- window.viewQR=async function(id){const p=cloudPeople.find(x=>x.id===id);if(!p)return;document.getElementById('qrname').textContent=p.name;document.getElementById('qrun').textContent=p.unit+' · '+p.type;document.getElementById('qrstatus').textContent=p.status==='Activo'?'● AUTORIZADO':'● NO AUTORIZADO';document.getElementById('qrstatus').style.color=p.status==='Activo'?'#16a34a':'#dc2626';try{document.getElementById('qrimg').src=await QR.default.toDataURL(p.qr_token,{width:220,margin:2,errorCorrectionLevel:'H'})}catch(e){document.getElementById('qrimg').removeAttribute('src')}show('qr')};
- window.validate=async function(raw){const token=String(raw||'').trim();let p=null;if(token){const {data}=await client.from('authorized_people').select('id,name,type,status,qr_token,unit_id,units(name)').eq('qr_token',token).maybeSingle();if(data)p={...data,unit:data.units?.name||''}}const result=p&&p.status==='Activo'?'AUTORIZADO':'DENEGADO';await client.from('access_logs').insert({person_id:p?.id||null,qr_token:p?.qr_token||null,result,guard_name:'Guarda'});const box=document.getElementById('result');if(!p){box.innerHTML='<div class="result badbox"><b>✕ NO AUTORIZADO</b><br><span class="muted">QR no encontrado.</span></div>';return}if(p.status!=='Activo'){box.innerHTML=`<div class="result badbox"><b>✕ ACCESO DENEGADO</b><br><strong>${p.name}</strong><br>${p.unit} · ${p.type}<br><span class="muted">La autorización está inactiva.</span></div>`;return}document.getElementById('last').textContent=p.name+' · '+new Date().toLocaleTimeString();box.innerHTML=`<div class="result goodbox"><b>✓ ACCESO AUTORIZADO</b><br><strong>${p.name}</strong><br>${p.unit} · ${p.type}<br><span class="muted">${new Date().toLocaleString()}</span></div>`};
- window.startScan=async function(){const video=document.getElementById('video');video.classList.remove('hidden');try{const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});video.srcObject=stream;if('BarcodeDetector' in window){const detector=new BarcodeDetector({formats:['qr_code']});const loop=async()=>{if(video.readyState>=2){try{const codes=await detector.detect(video);if(codes[0]?.rawValue){await window.validate(codes[0].rawValue);stream.getTracks().forEach(t=>t.stop());video.classList.add('hidden');return}}catch(e){}}requestAnimationFrame(loop)};loop()}else{alert('Este navegador no soporta escaneo QR automático. Use el campo de código.')}}catch(e){alert('No se pudo acceder a la cámara. Puede validar escribiendo el código.')}};
- window.newPerson=function(){document.getElementById('name').value='';document.getElementById('unit').value='';document.getElementById('status').value='Activo';show('form')};
- document.getElementById('authBtn').onclick=async()=>{const email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPass').value,msg=document.getElementById('authMsg');msg.textContent='Conectando…';const {data,error}=await client.auth.signInWithPassword({email,password});if(error){msg.textContent='Correo o contraseña incorrectos.';return}overlay.style.display='none';await load()};document.getElementById('authPass').onkeydown=e=>{if(e.key==='Enter')document.getElementById('authBtn').click()};
- const {data:{session:current}}=await client.auth.getSession();if(current){await load()}else{overlay.style.display='grid'};client.auth.onAuthStateChange((event,s)=>{if(event==='SIGNED_OUT'){location.reload()}});
- })();
-</script></body></html>
+
+const {createClient}=await import(
+'https://esm.sh/@supabase/supabase-js@2'
+);
+
+const QR=await import(
+'https://esm.sh/qrcode@1.5.4'
+);
+
+
+const client=createClient(
+'https://dbnjciqldjoospgmvlbq.supabase.co',
+'sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo'
+);
+
+
+let cloudPeople=[];
+
+
+const overlay=document.createElement('div');
+
+overlay.style=
+'position:fixed;inset:0;background:#0b1220;display:none;place-items:center;z-index:9999;padding:20px';
+
+
+overlay.innerHTML=`
+
+<div style="
+width:min(420px,100%);
+background:#121b2b;
+border:1px solid #29364b;
+border-radius:18px;
+padding:28px;
+color:#f4f7fb">
+
+<h2 style="margin:0 0 8px">
+🔐 Iniciar sesión
+</h2>
+
+<p style="color:#a9b5c8;margin:0 0 20px">
+Panel de administración del condominio
+</p>
+
+<label>Correo</label>
+
+<input
+id="authEmail"
+type="email"
+placeholder="admin@condominio.com"
+autocomplete="username">
+
+
+<label style="display:block;margin-top:12px">
+Contraseña
+</label>
+
+<input
+id="authPass"
+type="password"
+placeholder="Contraseña"
+autocomplete="current-password">
+
+
+<button
+id="authBtn"
+class="primary"
+style="width:100%;margin-top:16px">
+
+Entrar
+
+</button>
+
+<div
+id="authMsg"
+style="margin-top:12px;color:#fca5a5;font-size:14px">
+</div>
+
+</div>
+
+`;
+
+
+document.body.appendChild(overlay);
+
+
+async function load(){
+
+const {data,error}=await client
+.from('authorized_people')
+.select(
+'id,name,type,status,qr_token,unit_id,created_at,units(name)'
+)
+.order(
+'created_at',
+{ascending:false}
+);
+
+if(error){
+
+alert(
+'Error al cargar datos: '+error.message
+);
+
+return;
+
+}
+
+
+cloudPeople=(data||[]).map(p=>({
+
+...p,
+
+unit:p.units?.name||''
+
+}));
+
+
+renderCloud();
+
+}
+
+
+function renderCloud(){
+
+document.getElementById('count').textContent=
+cloudPeople.length;
+
+
+document.getElementById('active').textContent=
+cloudPeople.filter(
+p=>p.status==='Activo'
+).length;
+
+
+const tb=document.getElementById('tbody');
+
+if(!tb)return;
+
+
+tb.innerHTML=cloudPeople.map(p=>`
+
+<tr>
+
+<td>
+
+<b>${p.name}</b>
+
+<div class="muted">
+QR: ${p.qr_token.slice(0,8)}…
+</div>
+
+</td>
+
+<td>
+${p.unit}
+</td>
+
+<td>
+${p.type}
+</td>
+
+<td>
+
+<span class="pill ${
+p.status==='Activo'
+?'good'
+:'bad'
+}">
+
+${p.status}
+
+</span>
+
+</td>
+
+<td>
+
+<button
+class="smallbtn"
+onclick="viewQR('${p.id}')">
+
+QR
+
+</button>
+
+<button
+class="smallbtn"
+onclick="toggle('${p.id}')">
+
+${
+p.status==='Activo'
+?'Desactivar'
+:'Activar'
+}
+
+</button>
+
+</td>
+
+</tr>
+
+`).join('');
+
+}
+
+
+window.savePerson=async function(e){
+
+e.preventDefault();
+
+
+const name=
+document.getElementById('name')
+.value
+.trim();
+
+
+const unitName=
+document.getElementById('unit')
+.value
+.trim();
+
+
+const type=
+document.getElementById('type')
+.value;
+
+
+const status=
+document.getElementById('status')
+.value;
+
+
+if(!name||!unitName)return;
+
+
+const {data:u,error:ue}=await client
+.from('units')
+.upsert(
+{name:unitName},
+{onConflict:'name'}
+)
+.select()
+.single();
+
+
+if(ue){
+
+alert(
+'No se pudo guardar la casa/apartamento: '
++ue.message
+);
+
+return;
+
+}
+
+
+const {data:p,error}=await client
+.from('authorized_people')
+.insert({
+
+name,
+unit_id:u.id,
+type,
+status
+
+})
+.select(
+'id,name,type,status,qr_token,unit_id,created_at,units(name)'
+)
+.single();
+
+
+if(error){
+
+alert(
+'No se pudo guardar la persona: '
++error.message
+);
+
+return;
+
+}
+
+
+cloudPeople.unshift({
+
+...p,
+
+unit:p.units?.name||unitName
+
+});
+
+
+renderCloud();
+
+window.viewQR(p.id);
+
+};
+
+
+window.toggle=async function(id){
+
+const p=cloudPeople.find(
+x=>x.id===id
+);
+
+if(!p)return;
+
+
+const status=
+p.status==='Activo'
+?'Inactivo'
+:'Activo';
+
+
+const {error}=await client
+.from('authorized_people')
+.update({
+status,
+updated_at:new Date().toISOString()
+})
+.eq('id',id);
+
+
+if(error){
+
+alert(
+'No se pudo cambiar el estado: '
++error.message
+);
+
+return;
+
+}
+
+
+await load();
+
+};
+
+
+window.viewQR=async function(id){
+
+const p=cloudPeople.find(
+x=>x.id===id
+);
+
+if(!p)return;
+
+
+document.getElementById(
+'qrname'
+).textContent=p.name;
+
+
+document.getElementById(
+'qrun'
+).textContent=
+p.unit+' · '+p.type;
+
+
+document.getElementById(
+'qrstatus'
+).textContent=
+p.status==='Activo'
+?'● AUTORIZADO'
+:'● NO AUTORIZADO';
+
+
+document.getElementById(
+'qrstatus'
+).style.color=
+p.status==='Activo'
+?'#16a34a'
+:'#dc2626';
+
+
+try{
+
+document.getElementById(
+'qrimg'
+).src=
+await QR.default.toDataURL(
+p.qr_token,
+{
+width:220,
+margin:2,
+errorCorrectionLevel:'H'
+}
+);
+
+}catch(e){
+
+document.getElementById(
+'qrimg'
+).removeAttribute('src');
+
+}
+
+
+show('qr');
+
+};
+
+
+window.validate=async function(raw){
+
+const token=
+String(raw||'').trim();
+
+
+let p=null;
+
+
+if(token){
+
+const {data}=await client
+.from('authorized_people')
+.select(
+'id,name,type,status,qr_token,unit_id,units(name)'
+)
+.eq('qr_token',token)
+.maybeSingle();
+
+
+if(data){
+
+p={
+...data,
+unit:data.units?.name||''
+};
+
+}
+
+}
+
+
+const result=
+p&&p.status==='Activo'
+?'AUTORIZADO'
+:'DENEGADO';
+
+
+await client
+.from('access_logs')
+.insert({
+
+person_id:p?.id||null,
+qr_token:p?.qr_token||null,
+result,
+guard_name:'Guarda'
+
+});
+
+
+const box=
+document.getElementById('result');
+
+
+if(!p){
+
+box.innerHTML=`
+
+<div class="result badbox">
+
+<b>✕ NO AUTORIZADO</b>
+
+<br>
+
+<span class="muted">
+QR no encontrado.
+</span>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+if(p.status!=='Activo'){
+
+box.innerHTML=`
+
+<div class="result badbox">
+
+<b>✕ ACCESO DENEGADO</b>
+
+<br>
+
+<strong>${p.name}</strong>
+
+<br>
+
+${p.unit} · ${p.type}
+
+<br>
+
+<span class="muted">
+La autorización está inactiva.
+</span>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+document.getElementById(
+'last'
+).textContent=
+p.name+' · '+
+new Date().toLocaleTimeString();
+
+
+box.innerHTML=`
+
+<div class="result goodbox">
+
+<b>✓ ACCESO AUTORIZADO</b>
+
+<br>
+
+<strong>${p.name}</strong>
+
+<br>
+
+${p.unit} · ${p.type}
+
+<br>
+
+<span class="muted">
+
+${new Date().toLocaleString()}
+
+</span>
+
+</div>
+
+`;
+
+};
+
+
+// AQUÍ ESTÁ LA PARTE IMPORTANTE:
+// lector QR compatible con teléfonos mediante jsQR
+
+window.startScan=async function(){
+
+const video=
+document.getElementById('video');
+
+
+video.classList.remove('hidden');
+
+
+try{
+
+const stream=
+await navigator.mediaDevices.getUserMedia({
+
+video:{
+facingMode:'environment'
+},
+
+audio:false
+
+});
+
+
+video.srcObject=stream;
+
+
+const jsQRmod=
+await import(
+'https://esm.sh/jsqr@1.4.0'
+);
+
+
+const jsQR=
+jsQRmod.default||jsQRmod;
+
+
+const canvas=
+document.createElement('canvas');
+
+
+const ctx=
+canvas.getContext(
+'2d',
+{
+willReadFrequently:true
+}
+);
+
+
+const loop=async()=>{
+
+if(video.readyState>=2){
+
+canvas.width=
+video.videoWidth;
+
+canvas.height=
+video.videoHeight;
+
+
+ctx.drawImage(
+video,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+const image=
+ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+const code=
+jsQR(
+image.data,
+image.width,
+image.height
+);
+
+
+if(code?.data){
+
+await window.validate(
+code.data
+);
+
+
+stream
+.getTracks()
+.forEach(
+t=>t.stop()
+);
+
+
+video.classList.add(
+'hidden'
+);
+
+return;
+
+}
+
+}
+
+
+requestAnimationFrame(loop);
+
+};
+
+
+loop();
+
+
+}catch(e){
+
+alert(
+'No se pudo acceder a la cámara o al lector QR. Puede validar escribiendo el código.'
+);
+
+}
+
+};
+
+
+window.newPerson=function(){
+
+document.getElementById('name').value='';
+
+document.getElementById('unit').value='';
+
+document.getElementById('status').value='Activo';
+
+show('form');
+
+};
+
+
+document.getElementById(
+'authBtn'
+).onclick=async()=>{
+
+const email=
+document.getElementById(
+'authEmail'
+).value.trim();
+
+
+const password=
+document.getElementById(
+'authPass'
+).value;
+
+
+const msg=
+document.getElementById(
+'authMsg'
+);
+
+
+msg.textContent=
+'Conectando…';
+
+
+const {data,error}=
+await client.auth.signInWithPassword({
+
+email,
+password
+
+});
+
+
+if(error){
+
+msg.textContent=
+'Correo o contraseña incorrectos.';
+
+return;
+
+}
+
+
+overlay.style.display='none';
+
+await load();
+
+};
+
+
+document.getElementById(
+'authPass'
+).onkeydown=e=>{
+
+if(e.key==='Enter'){
+
+document
+.getElementById('authBtn')
+.click();
+
+}
+
+};
+
+
+const {
+data:{
+session:current
+}
+}=await client.auth.getSession();
+
+
+if(current){
+
+await load();
+
+}else{
+
+overlay.style.display='grid';
+
+}
+
+
+client.auth.onAuthStateChange(
+(event,s)=>{
+
+if(event==='SIGNED_OUT'){
+
+location.reload();
+
+}
+
+}
+);
+
+
+function show(id,btn){
+
+document
+.querySelectorAll(
+'main section'
+)
+.forEach(
+s=>s.classList.add('hidden')
+);
+
+
+document
+.getElementById(id)
+.classList.remove('hidden');
+
+
+if(btn){
+
+document
+.querySelectorAll('nav button')
+.forEach(
+b=>b.classList.remove('active')
+);
+
+btn.classList.add('active');
+
+}
+
+}
+
+
+window.show=show;
+
+})();
+</script>
+
+</body>
+</html>
