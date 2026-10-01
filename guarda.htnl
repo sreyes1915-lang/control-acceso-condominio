@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Guarda · Condominio Casa Mia</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+header{
+    background:#ffffff;
+    border-bottom:1px solid #dfe5ee;
+    padding:16px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:45px;
+    height:45px;
+    border-radius:12px;
+    background:#2563eb;
+    color:#ffffff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+}
+
+.muted{
+    color:#64748b;
+}
+
+main{
+    max-width:600px;
+    margin:auto;
+    padding:25px 18px;
+}
+
+.card{
+    background:#ffffff;
+    border:1px solid #dfe5ee;
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
+}
+
+h2{
+    margin-bottom:8px;
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:14px 18px;
+    font-weight:800;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.primary{
+    background:#2563eb;
+    color:#ffffff;
+}
+
+.secondary{
+    background:#172033;
+    color:#ffffff;
+}
+
+.logout{
+    background:#ffffff;
+    color:#172033;
+    border:1px solid #dfe5ee;
+    padding:9px 12px;
+    font-size:13px;
+}
+
+input{
+    width:100%;
+    border:1px solid #cbd5e1;
+    border-radius:12px;
+    padding:14px;
+    font-size:16px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#2563eb;
+}
+
+#manual{
+    text-align:center;
+    font-size:30px;
+    font-weight:900;
+    letter-spacing:12px;
+    margin-top:10px;
+}
+
+#manualBtn{
+    width:100%;
+    margin-top:10px;
+}
+
+#scanBtn{
+    width:100%;
+    margin-top:20px;
+}
+
+video{
+    width:100%;
+    border-radius:16px;
+    background:#000;
+    margin-top:16px;
+    min-height:280px;
+}
+
+.hidden{
+    display:none !important;
+}
+
+.result{
+    margin-top:20px;
+    padding:25px;
+    border-radius:18px;
+    text-align:center;
+}
+
+.good{
+    background:#ecfdf3;
+    border:3px solid #22c55e;
+    color:#14532d;
+}
+
+.bad{
+    background:#fef2f2;
+    border:3px solid #ef4444;
+    color:#7f1d1d;
+}
+
+.big{
+    font-size:25px;
+    font-weight:900;
+}
+
+.person{
+    font-size:23px;
+    font-weight:900;
+    margin-top:12px;
+}
+
+.login{
+    position:fixed;
+    inset:0;
+    background:#0b1220;
+    display:grid;
+    place-items:center;
+    padding:20px;
+    z-index:100;
+}
+
+.loginbox{
+    width:min(420px,100%);
+    background:#121b2b;
+    color:#ffffff;
+    border-radius:20px;
+    padding:28px;
+}
+
+.loginbox input{
+    background:#ffffff;
+    color:#172033;
+    text-align:left;
+    letter-spacing:0;
+}
+
+.loginbox label{
+    display:block;
+    margin-top:16px;
+}
+
+#loginBtn{
+    width:100%;
+    margin-top:18px;
+}
+
+#loginMsg{
+    color:#fca5a5;
+    margin-top:12px;
+}
+
+.divider{
+    text-align:center;
+    margin:22px 0 10px;
+    color:#94a3b8;
+}
+
+.instructions{
+    text-align:center;
+    line-height:1.5;
+    margin-top:7px;
+}
+
+@media(max-width:600px){
+
+    header{
+        padding:14px;
+    }
+
+    main{
+        padding:14px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="brand">
+
+<div class="logo">
+QR
+</div>
+
+<div>
+<b>Condominio Casa Mia</b>
+<div class="muted">
+Panel del guarda
+</div>
+</div>
+
+</div>
+
+<button
+class="logout"
+id="logout">
+Salir
+</button>
+
+</header>
+
+
+<main>
+
+<div class="card">
+
+<h2 style="text-align:center">
+🛡️ Validar acceso
+</h2>
+
+<p class="muted instructions">
+Escanee el QR del visitante o utilice su código de respaldo.
+</p>
+
+
+<button
+class="primary"
+id="scanBtn">
+
+📷 Escanear QR
+
+</button>
+
+
+<video
+id="video"
+class="hidden"
+autoplay
+playsinline>
+</video>
+
+
+<div class="divider">
+— o —
+</div>
+
+
+<div
+class="muted"
+style="text-align:center">
+
+Código de respaldo
+
+</div>
+
+
+<input
+id="manual"
+type="text"
+inputmode="numeric"
+pattern="[0-9]*"
+maxlength="4"
+placeholder="1234"
+autocomplete="off">
+
+
+<button
+class="secondary"
+id="manualBtn">
+
+Validar código
+
+</button>
+
+
+<div id="result"></div>
+
+</div>
+
+</main>
+
+
+
+<!-- LOGIN -->
+
+<div
+id="login"
+class="login">
+
+<div class="loginbox">
+
+<h2>
+🔐 Acceso de guarda
+</h2>
+
+<p style="color:#a9b5c8;margin-top:8px">
+Condominio Casa Mia
+</p>
+
+
+<label>
+Correo
+</label>
+
+<input
+id="email"
+type="email"
+placeholder="guarda@condominio.com"
+autocomplete="username">
+
+
+<label>
+Contraseña
+</label>
+
+<input
+id="password"
+type="password"
+placeholder="Contraseña"
+autocomplete="current-password">
+
+
+<button
+class="primary"
+id="loginBtn">
+
+Entrar
+
+</button>
+
+
+<div id="loginMsg"></div>
+
+</div>
+
+</div>
+
+
+
+<script type="module">
+
+import {
+    createClient
+}
+from
+'https://esm.sh/@supabase/supabase-js@2';
+
+
+import jsQR
+from
+'https://esm.sh/jsqr@1.4.0';
+
+
+const SUPABASE_URL =
+'https://dbnjciqldjoospgmvlbq.supabase.co';
+
+
+const SUPABASE_KEY =
+'sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo';
+
+
+const supabase =
+createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+const $ =
+id =>
+document.getElementById(id);
+
+
+
+/* =========================================
+   GENERAR CÓDIGO DE RESPALDO DE 4 DÍGITOS
+========================================= */
+
+function backupCode(token){
+
+    if(!token){
+        return '';
+    }
+
+    const clean =
+    token
+    .replace(/-/g,'')
+    .toLowerCase();
+
+    /*
+       Convertimos parte del UUID a número
+       y lo dejamos siempre en 4 dígitos.
+    */
+
+    let hash = 0;
+
+    for(let i=0;i<clean.length;i++){
+
+        hash =
+        (
+            (hash * 31)
+            +
+            clean.charCodeAt(i)
+        )
+        >>> 0;
+
+    }
+
+    return String(
+        hash % 10000
+    ).padStart(4,'0');
+
+}
+
+
+
+/* =========================================
+   MOSTRAR RESULTADO
+========================================= */
+
+function showResult(
+    authorized,
+    person=null,
+    message=''
+){
+
+    const result =
+    $('result');
+
+
+    if(!person){
+
+        result.innerHTML = `
+
+        <div class="result bad">
+
+            <div class="big">
+                ✕ NO AUTORIZADO
+            </div>
+
+            <div style="margin-top:10px">
+                ${message || 'Código no encontrado.'}
+            </div>
+
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    if(!authorized){
+
+        result.innerHTML = `
+
+        <div class="result bad">
+
+            <div class="big">
+                ✕ ACCESO DENEGADO
+            </div>
+
+            <div class="person">
+                ${person.name}
+            </div>
+
+            <div style="margin-top:6px">
+                ${person.unit}
+                ·
+                ${person.type}
+            </div>
+
+            <div style="margin-top:12px">
+                La autorización está inactiva.
+            </div>
+
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    result.innerHTML = `
+
+    <div class="result good">
+
+        <div class="big">
+            ✓ ACCESO AUTORIZADO
+        </div>
+
+        <div class="person">
+            ${person.name}
+        </div>
+
+        <div style="margin-top:6px">
+            ${person.unit}
+            ·
+            ${person.type}
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+
+
+/* =========================================
+   REGISTRAR ACCESO
+========================================= */
+
+async function saveLog(
+    person,
+    result
+){
+
+    try{
+
+        await supabase
+        .from('access_logs')
+        .insert({
+
+            person_id:
+            person?.id || null,
+
+            qr_token:
+            person?.qr_token || null,
+
+            result:
+            result,
+
+            guard_name:
+            'Guarda'
+
+        });
+
+    }
+    catch(error){
+
+        console.error(
+            'Error guardando acceso:',
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   VALIDAR QR
+========================================= */
+
+async function validateQR(token){
+
+    const value =
+    String(token || '')
+    .trim();
+
+
+    if(!value){
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+    await supabase
+    .from('authorized_people')
+    .select(
+        'id,name,type,status,qr_token,units(name)'
+    )
+    .eq(
+        'qr_token',
+        value
+    )
+    .maybeSingle();
+
+
+    if(error){
+
+        console.error(error);
+
+        showResult(
+            false,
+            null,
+            'No se pudo consultar el acceso.'
+        );
+
+        return;
+
+    }
+
+
+    if(!data){
+
+        await saveLog(
+            null,
+            'DENEGADO'
+        );
+
+        showResult(
+            false,
+            null,
+            'QR no encontrado.'
+        );
+
+        return;
+
+    }
+
+
+    const person = {
+
+        ...data,
+
+        unit:
+        data.units?.name || ''
+
+    };
+
+
+    const authorized =
+    person.status === 'Activo';
+
+
+    await saveLog(
+
+        person,
+
+        authorized
+        ?
+        'AUTORIZADO'
+        :
+        'DENEGADO'
+
+    );
+
+
+    showResult(
+        authorized,
+        person
+    );
+
+}
+
+
+
+/* =========================================
+   VALIDAR CÓDIGO DE 4 DÍGITOS
+========================================= */
+
+async function validateBackup(code){
+
+    const value =
+    String(code || '')
+    .replace(/\D/g,'')
+    .slice(0,4);
+
+
+    if(value.length !== 4){
+
+        showResult(
+            false,
+            null,
+            'Ingrese los 4 dígitos.'
+        );
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+    await supabase
+    .from('authorized_people')
+    .select(
+        'id,name,type,status,qr_token,units(name)'
+    );
+
+
+    if(error){
+
+        console.error(error);
+
+        showResult(
+            false,
+            null,
+            'No se pudo consultar el código.'
+        );
+
+        return;
+
+    }
+
+
+    const matches =
+    (data || [])
+    .filter(
+        person =>
+        backupCode(
+            person.qr_token
+        )
+        ===
+        value
+    );
+
+
+    /*
+       Si no encontramos ninguno
+    */
+
+    if(matches.length === 0){
+
+        await saveLog(
+            null,
+            'DENEGADO'
+        );
+
+        showResult(
+            false,
+            null,
+            'Código no encontrado.'
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Seguridad:
+       si dos personas tienen accidentalmente
+       el mismo código de 4 dígitos,
+       no autorizamos automáticamente.
+    */
+
+    if(matches.length > 1){
+
+        showResult(
+            false,
+            null,
+            'Código duplicado. Escanee el QR.'
+        );
+
+        return;
+
+    }
+
+
+    const dataPerson =
+    matches[0];
+
+
+    const person = {
+
+        ...dataPerson,
+
+        unit:
+        dataPerson.units?.name || ''
+
+    };
+
+
+    const authorized =
+    person.status === 'Activo';
+
+
+    await saveLog(
+
+        person,
+
+        authorized
+        ?
+        'AUTORIZADO'
+        :
+        'DENEGADO'
+
+    );
+
+
+    showResult(
+        authorized,
+        person
+    );
+
+}
+
+
+
+/* =========================================
+   BOTÓN CÓDIGO MANUAL
+========================================= */
+
+$('manualBtn')
+.addEventListener(
+'click',
+()=>{
+
+    validateBackup(
+        $('manual').value
+    );
+
+});
+
+
+
+$('manual')
+.addEventListener(
+'input',
+e=>{
+
+    e.target.value =
+    e.target.value
+    .replace(/\D/g,'')
+    .slice(0,4);
+
+});
+
+
+
+$('manual')
+.addEventListener(
+'keydown',
+e=>{
+
+    if(e.key === 'Enter'){
+
+        validateBackup(
+            $('manual').value
+        );
+
+    }
+
+});
+
+
+
+/* =========================================
+   CÁMARA QR
+========================================= */
+
+let stream = null;
+
+let scanning = false;
+
+
+
+async function stopCamera(){
+
+    scanning = false;
+
+
+    if(stream){
+
+        stream
+        .getTracks()
+        .forEach(
+            track =>
+            track.stop()
+        );
+
+        stream = null;
+
+    }
+
+
+    $('video')
+    .classList
+    .add('hidden');
+
+}
+
+
+
+async function startCamera(){
+
+    await stopCamera();
+
+
+    $('result').innerHTML = '';
+
+
+    try{
+
+        stream =
+        await navigator
+        .mediaDevices
+        .getUserMedia({
+
+            video:{
+
+                facingMode:{
+                    ideal:'environment'
+                }
+
+            },
+
+            audio:false
+
+        });
+
+
+        const video =
+        $('video');
+
+
+        video.srcObject =
+        stream;
+
+
+        video
+        .classList
+        .remove('hidden');
+
+
+        await video.play();
+
+
+        scanning = true;
+
+
+        requestAnimationFrame(
+            scanFrame
+        );
+
+    }
+    catch(error){
+
+        console.error(error);
+
+
+        showResult(
+            false,
+            null,
+            'No se pudo abrir la cámara. Revise el permiso de cámara.'
+        );
+
+    }
+
+}
+
+
+
+function scanFrame(){
+
+    if(!scanning){
+        return;
+    }
+
+
+    const video =
+    $('video');
+
+
+    if(
+        video.readyState
+        ===
+        video.HAVE_ENOUGH_DATA
+    ){
+
+        const canvas =
+        document.createElement(
+            'canvas'
+        );
+
+
+        canvas.width =
+        video.videoWidth;
+
+
+        canvas.height =
+        video.videoHeight;
+
+
+        const ctx =
+        canvas.getContext(
+            '2d',
+            {
+                willReadFrequently:true
+            }
+        );
+
+
+        ctx.drawImage(
+            video,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        const imageData =
+        ctx.getImageData(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        const code =
+        jsQR(
+
+            imageData.data,
+
+            imageData.width,
+
+            imageData.height,
+
+            {
+                inversionAttempts:
+                'dontInvert'
+            }
+
+        );
+
+
+        if(
+            code
+            &&
+            code.data
+        ){
+
+            stopCamera();
+
+            validateQR(
+                code.data
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        scanFrame
+    );
+
+}
+
+
+
+$('scanBtn')
+.addEventListener(
+'click',
+startCamera
+);
+
+
+
+/* =========================================
+   LOGIN GUARDA
+========================================= */
+
+async function checkSession(){
+
+    const {
+        data
+    } =
+    await supabase
+    .auth
+    .getSession();
+
+
+    if(
+        data.session
+    ){
+
+        $('login')
+        .classList
+        .add('hidden');
+
+    }
+    else{
+
+        $('login')
+        .classList
+        .remove('hidden');
+
+    }
+
+}
+
+
+
+$('loginBtn')
+.addEventListener(
+'click',
+async()=>{
+
+    const email =
+    $('email')
+    .value
+    .trim();
+
+
+    const password =
+    $('password')
+    .value;
+
+
+    $('loginMsg')
+    .textContent =
+    'Ingresando...';
+
+
+    const {
+        error
+    } =
+    await supabase
+    .auth
+    .signInWithPassword({
+
+        email,
+
+        password
+
+    });
+
+
+    if(error){
+
+        $('loginMsg')
+        .textContent =
+        'No se pudo iniciar sesión: '
+        +
+        error.message;
+
+        return;
+
+    }
+
+
+    $('loginMsg')
+    .textContent =
+    '';
+
+
+    $('login')
+    .classList
+    .add('hidden');
+
+});
+
+
+
+$('password')
+.addEventListener(
+'keydown',
+e=>{
+
+    if(e.key === 'Enter'){
+
+        $('loginBtn')
+        .click();
+
+    }
+
+});
+
+
+
+/* =========================================
+   CERRAR SESIÓN
+========================================= */
+
+$('logout')
+.addEventListener(
+'click',
+async()=>{
+
+    await stopCamera();
+
+    await supabase
+    .auth
+    .signOut();
+
+    $('login')
+    .classList
+    .remove('hidden');
+
+});
+
+
+
+/* =========================================
+   CAMBIOS DE SESIÓN
+========================================= */
+
+supabase
+.auth
+.onAuthStateChange(
+(event,session)=>{
+
+    if(session){
+
+        $('login')
+        .classList
+        .add('hidden');
+
+    }
+    else{
+
+        $('login')
+        .classList
+        .remove('hidden');
+
+    }
+
+});
+
+
+
+/* =========================================
+   INICIAR
+========================================= */
+
+checkSession();
+
+</script>
+
+</body>
+</html>
