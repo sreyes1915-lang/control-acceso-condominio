@@ -6,34 +6,19 @@
 <title>Control de Acceso</title>
 
 <style>
-:root{
-color-scheme:light dark;
---bg:light-dark(#f4f7fb,#0b1220);
---surface:light-dark(#fff,#121b2b);
---text:light-dark(#172033,#f4f7fb);
---muted:light-dark(#667085,#a9b5c8);
---border:light-dark(#dfe5ee,#29364b);
---accent:#2563eb
-}
-
 *{box-sizing:border-box}
 
 body{
 margin:0;
-background:var(--bg);
-color:var(--text);
-font-family:Inter,system-ui,Arial
-}
-
-#app{
-min-height:100vh;
-background:var(--bg)
+font-family:Arial,system-ui,sans-serif;
+background:#f4f7fb;
+color:#172033
 }
 
 header{
-padding:22px 28px;
-border-bottom:1px solid var(--border);
-background:var(--surface);
+padding:20px 28px;
+background:white;
+border-bottom:1px solid #dfe5ee;
 display:flex;
 justify-content:space-between;
 align-items:center
@@ -49,11 +34,11 @@ align-items:center
 width:42px;
 height:42px;
 border-radius:12px;
-background:var(--accent);
+background:#2563eb;
 display:grid;
 place-items:center;
 color:white;
-font-weight:800
+font-weight:bold
 }
 
 h1,h2,p{margin:0}
@@ -72,25 +57,28 @@ flex-wrap:wrap
 }
 
 button{
-border:1px solid var(--border);
-background:var(--surface);
-color:var(--text);
+border:1px solid #dfe5ee;
+background:white;
+color:#172033;
 padding:11px 15px;
 border-radius:10px;
 cursor:pointer;
-font-weight:650
+font-weight:bold
 }
 
 button.primary{
-background:var(--accent);
+background:#2563eb;
 color:white;
-border-color:var(--accent)
+border-color:#2563eb
 }
 
 button.active{
-background:var(--accent);
-color:white;
-border-color:var(--accent)
+background:#2563eb;
+color:white
+}
+
+.hidden{
+display:none!important
 }
 
 .grid{
@@ -100,20 +88,20 @@ gap:16px
 }
 
 .card{
-background:var(--surface);
-border:1px solid var(--border);
+background:white;
+border:1px solid #dfe5ee;
 border-radius:16px;
 padding:20px
 }
 
 .stat{
 font-size:30px;
-font-weight:800;
+font-weight:bold;
 margin-top:8px
 }
 
 .muted{
-color:var(--muted);
+color:#667085;
 font-size:14px
 }
 
@@ -132,7 +120,7 @@ margin-top:14px
 
 th,td{
 padding:13px 10px;
-border-bottom:1px solid var(--border);
+border-bottom:1px solid #dfe5ee;
 text-align:left
 }
 
@@ -140,7 +128,7 @@ text-align:left
 padding:5px 9px;
 border-radius:99px;
 font-size:12px;
-font-weight:750
+font-weight:bold
 }
 
 .good{
@@ -156,16 +144,16 @@ color:#991b1b
 input,select{
 width:100%;
 padding:12px;
-border:1px solid var(--border);
+border:1px solid #dfe5ee;
 border-radius:10px;
-background:var(--surface);
-color:var(--text);
+background:white;
+color:#172033;
 margin-top:6px
 }
 
 label{
 font-size:13px;
-font-weight:700
+font-weight:bold
 }
 
 .form{
@@ -187,8 +175,15 @@ gap:12px
 
 .qrbox img{
 width:220px;
-height:220px;
-border-radius:8px
+height:220px
+}
+
+.backup{
+font-size:28px;
+font-weight:900;
+letter-spacing:4px;
+margin-top:5px;
+color:#172033
 }
 
 .scanner{
@@ -224,81 +219,183 @@ border:2px solid #ef4444;
 color:#7f1d1d
 }
 
-.hidden{
-display:none
-}
-
 .smallbtn{
 padding:7px 9px;
 font-size:12px
 }
 
+.login{
+position:fixed;
+inset:0;
+background:#0b1220;
+display:grid;
+place-items:center;
+z-index:9999;
+padding:20px
+}
+
+.loginbox{
+width:min(420px,100%);
+background:#121b2b;
+border:1px solid #29364b;
+border-radius:18px;
+padding:28px;
+color:white
+}
+
+.loginbox input{
+background:#fff;
+color:#172033
+}
+
 @media(max-width:650px){
-main{padding:18px}
-.form{grid-template-columns:1fr}
-.full{grid-column:auto}
-header{padding:18px}
-table{font-size:13px}
+
+main{
+padding:18px
+}
+
+.form{
+grid-template-columns:1fr
+}
+
+.full{
+grid-column:auto
+}
+
+header{
+padding:18px
+}
+
+table{
+font-size:13px
+}
+
 }
 </style>
 </head>
 
 <body>
 
-<div id="app">
-
 <header>
+
 <div class="brand">
-<div class="logo">QR</div>
-<div>
-<h1>Control de Acceso</h1>
-<div class="muted">Condominio · autorización digital</div>
-</div>
+
+<div class="logo">
+QR
 </div>
 
-<div class="muted">Panel administrativo</div>
+<div>
+
+<h1>Control de Acceso</h1>
+
+<div class="muted">
+Condominio · autorización digital
+</div>
+
+</div>
+
+</div>
+
+<div class="muted">
+Panel administrativo
+</div>
+
 </header>
+
 
 <main>
 
 <nav>
-<button class="active" onclick="show('dash',this)">Resumen</button>
-<button onclick="show('people',this)">Autorizados</button>
-<button onclick="show('guard',this)">Modo Guarda</button>
+
+<button
+class="active"
+onclick="show('dash',this)">
+Resumen
+</button>
+
+<button
+onclick="show('people',this)">
+Autorizados
+</button>
+
+<button
+onclick="show('guard',this)">
+Modo Guarda
+</button>
+
 </nav>
+
 
 <section id="dash">
 
 <div class="grid">
 
 <div class="card">
-<div class="muted">Personas registradas</div>
-<div class="stat" id="count">0</div>
+
+<div class="muted">
+Personas registradas
 </div>
 
-<div class="card">
-<div class="muted">Autorizaciones activas</div>
-<div class="stat" id="active">0</div>
+<div
+class="stat"
+id="count">
+0
 </div>
 
+</div>
+
+
 <div class="card">
-<div class="muted">Último acceso</div>
-<div class="stat" style="font-size:18px" id="last">
+
+<div class="muted">
+Autorizaciones activas
+</div>
+
+<div
+class="stat"
+id="active">
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="muted">
+Último acceso
+</div>
+
+<div
+class="stat"
+style="font-size:18px"
+id="last">
 Sin registros
 </div>
-</div>
 
 </div>
 
-<div class="card" style="margin-top:18px">
+</div>
 
-<h2>Cómo funciona</h2>
 
-<p class="muted" style="margin-top:10px;line-height:1.6">
-1. Administración registra a la persona.
-2. Se genera un QR único.
-3. El residente lo muestra al guarda.
-4. El guarda escanea y recibe una respuesta verde o roja.
+<div
+class="card"
+style="margin-top:18px">
+
+<h2>
+Cómo funciona
+</h2>
+
+<p
+class="muted"
+style="margin-top:10px;line-height:1.6">
+
+1. Administración registra a la persona.<br>
+2. Se genera un QR único.<br>
+3. El residente muestra el QR al guarda.<br>
+4. Si el QR falla, el guarda puede usar el código de respaldo.<br>
+5. El sistema indica si el acceso está autorizado.
+
 </p>
 
 </div>
@@ -306,35 +403,67 @@ Sin registros
 </section>
 
 
-<section id="people" class="hidden">
+<section
+id="people"
+class="hidden">
 
 <div class="row">
 
 <div>
-<h2>Personas autorizadas</h2>
+
+<h2>
+Personas autorizadas
+</h2>
+
 <div class="muted">
 Administra quién puede ingresar.
 </div>
+
 </div>
 
-<button class="primary" onclick="newPerson()">
+<button
+class="primary"
+onclick="newPerson()">
+
 + Agregar persona
+
 </button>
 
 </div>
 
-<div class="card" style="margin-top:16px;overflow:auto">
+
+<div
+class="card"
+style="margin-top:16px;overflow:auto">
 
 <table>
 
 <thead>
+
 <tr>
-<th>Nombre</th>
-<th>Unidad</th>
-<th>Tipo</th>
-<th>Estado</th>
-<th></th>
+
+<th>
+Nombre
+</th>
+
+<th>
+Unidad
+</th>
+
+<th>
+Tipo
+</th>
+
+<th>
+Estado
+</th>
+
+<th>
+Acciones
+</th>
+
 </tr>
+
 </thead>
 
 <tbody id="tbody"></tbody>
@@ -346,23 +475,34 @@ Administra quién puede ingresar.
 </section>
 
 
-<section id="guard" class="hidden">
+<section
+id="guard"
+class="hidden">
 
 <div class="scanner">
 
-<h2>Modo Guarda</h2>
+<h2>
+Modo Guarda
+</h2>
 
-<p class="muted" style="margin-top:8px">
-Apunte la cámara al QR. Si la cámara no está disponible,
-escriba el código.
+<p
+class="muted"
+style="margin-top:8px">
+
+Escanee el QR o escriba el código de respaldo.
+
 </p>
+
 
 <button
 class="primary"
 style="margin-top:16px"
 onclick="startScan()">
+
 📷 Activar cámara
+
 </button>
+
 
 <video
 id="video"
@@ -371,17 +511,34 @@ autoplay
 playsinline>
 </video>
 
-<div style="display:flex;gap:8px;margin-top:10px">
+
+<div
+style="display:flex;gap:8px;margin-top:10px">
 
 <input
 id="manual"
-placeholder="Pegue aquí el código QR">
+placeholder="Ej. A7F29C31"
+maxlength="8"
+style="text-transform:uppercase">
 
-<button onclick="validate(document.getElementById('manual').value)">
+<button
+onclick="validateManual()">
+
 Validar
+
 </button>
 
 </div>
+
+
+<div
+class="muted"
+style="margin-top:8px">
+
+Código de respaldo: 8 caracteres.
+
+</div>
+
 
 <div id="result"></div>
 
@@ -390,23 +547,31 @@ Validar
 </section>
 
 
-<section id="form" class="hidden">
+<section
+id="form"
+class="hidden">
 
 <div class="card">
 
 <div class="row">
 
 <div>
-<h2>Nueva persona</h2>
+
+<h2>
+Nueva persona
+</h2>
 
 <div class="muted">
-El QR se genera automáticamente.
+El QR y el código se generan automáticamente.
 </div>
 
 </div>
 
-<button onclick="show('people')">
+<button
+onclick="show('people')">
+
 Cancelar
+
 </button>
 
 </div>
@@ -420,7 +585,9 @@ style="margin-top:20px">
 
 <div>
 
-<label>Nombre completo</label>
+<label>
+Nombre completo
+</label>
 
 <input
 id="name"
@@ -431,7 +598,9 @@ required>
 
 <div>
 
-<label>Casa / apartamento</label>
+<label>
+Casa / apartamento
+</label>
 
 <input
 id="unit"
@@ -442,14 +611,27 @@ required>
 
 <div>
 
-<label>Tipo</label>
+<label>
+Tipo
+</label>
 
 <select id="type">
 
-<option>Residente</option>
-<option>Familiar</option>
-<option>Visitante frecuente</option>
-<option>Proveedor</option>
+<option>
+Residente
+</option>
+
+<option>
+Familiar
+</option>
+
+<option>
+Visitante frecuente
+</option>
+
+<option>
+Proveedor
+</option>
 
 </select>
 
@@ -458,12 +640,19 @@ required>
 
 <div>
 
-<label>Estado</label>
+<label>
+Estado
+</label>
 
 <select id="status">
 
-<option>Activo</option>
-<option>Inactivo</option>
+<option>
+Activo
+</option>
+
+<option>
+Inactivo
+</option>
 
 </select>
 
@@ -491,7 +680,9 @@ Guardar autorización
 </section>
 
 
-<section id="qr" class="hidden">
+<section
+id="qr"
+class="hidden">
 
 <div class="card">
 
@@ -499,7 +690,9 @@ Guardar autorización
 
 <div>
 
-<h2>Credencial QR</h2>
+<h2>
+Credencial de acceso
+</h2>
 
 <div class="muted">
 El autorizado puede mostrar esta pantalla desde su teléfono.
@@ -507,8 +700,11 @@ El autorizado puede mostrar esta pantalla desde su teléfono.
 
 </div>
 
-<button onclick="show('people')">
+<button
+onclick="show('people')">
+
 Volver
+
 </button>
 
 </div>
@@ -518,13 +714,51 @@ Volver
 class="qrbox"
 style="margin-top:22px">
 
+
 <h2 id="qrname"></h2>
 
-<div class="muted" id="qrun"></div>
 
-<img id="qrimg">
+<div
+class="muted"
+id="qrun">
+</div>
 
-<strong id="qrstatus"></strong>
+
+<img
+id="qrimg"
+alt="Código QR">
+
+
+<strong
+id="qrstatus">
+</strong>
+
+
+<div
+style="text-align:center;margin-top:10px">
+
+<div class="muted">
+Código de respaldo
+</div>
+
+
+<div
+id="qrcodebackup"
+class="backup">
+</div>
+
+
+<div
+class="muted"
+style="margin-top:6px">
+
+Si la cámara no puede leer el QR,
+el guarda puede escribir este código.
+
+</div>
+
+</div>
+
 
 <button
 class="primary"
@@ -534,6 +768,7 @@ onclick="window.print()">
 
 </button>
 
+
 </div>
 
 </div>
@@ -542,111 +777,157 @@ onclick="window.print()">
 
 </main>
 
-</div>
 
+<div
+id="login"
+class="login">
 
-<script>
+<div class="loginbox">
 
-const {createClient}=await import(
-'https://esm.sh/@supabase/supabase-js@2'
-);
-
-const QR=await import(
-'https://esm.sh/qrcode@1.5.4'
-);
-
-
-const client=createClient(
-'https://dbnjciqldjoospgmvlbq.supabase.co',
-'sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo'
-);
-
-
-let cloudPeople=[];
-
-
-const overlay=document.createElement('div');
-
-overlay.style=
-'position:fixed;inset:0;background:#0b1220;display:none;place-items:center;z-index:9999;padding:20px';
-
-
-overlay.innerHTML=`
-
-<div style="
-width:min(420px,100%);
-background:#121b2b;
-border:1px solid #29364b;
-border-radius:18px;
-padding:28px;
-color:#f4f7fb">
-
-<h2 style="margin:0 0 8px">
+<h2>
 🔐 Iniciar sesión
 </h2>
 
-<p style="color:#a9b5c8;margin:0 0 20px">
+<p
+style="color:#a9b5c8;margin-top:8px">
+
 Panel de administración del condominio
+
 </p>
 
-<label>Correo</label>
+
+<label
+style="display:block;margin-top:20px">
+
+Correo
+
+</label>
 
 <input
 id="authEmail"
 type="email"
-placeholder="admin@condominio.com"
-autocomplete="username">
+placeholder="admin@condominio.com">
 
 
-<label style="display:block;margin-top:12px">
+<label
+style="display:block;margin-top:12px">
+
 Contraseña
+
 </label>
 
 <input
 id="authPass"
 type="password"
-placeholder="Contraseña"
-autocomplete="current-password">
+placeholder="Contraseña">
 
 
 <button
 id="authBtn"
 class="primary"
-style="width:100%;margin-top:16px">
+style="width:100%;margin-top:18px">
 
 Entrar
 
 </button>
 
+
 <div
 id="authMsg"
-style="margin-top:12px;color:#fca5a5;font-size:14px">
+style="margin-top:12px;color:#fca5a5">
 </div>
 
 </div>
 
-`;
+</div>
 
 
-document.body.appendChild(overlay);
+<script type="module">
+
+import {
+createClient
+}
+from
+'https://esm.sh/@supabase/supabase-js@2';
 
 
-async function load(){
+import QRCode
+from
+'https://esm.sh/qrcode@1.5.4';
 
-const {data,error}=await client
+
+const SUPABASE_URL =
+'https://dbnjciqldjoospgmvlbq.supabase.co';
+
+
+const SUPABASE_KEY =
+'sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo';
+
+
+const supabase =
+createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+let people=[];
+
+
+function show(id,button){
+
+document
+.querySelectorAll('main section')
+.forEach(
+s=>s.classList.add('hidden')
+);
+
+document
+.getElementById(id)
+.classList.remove('hidden');
+
+
+if(button){
+
+document
+.querySelectorAll('nav button')
+.forEach(
+b=>b.classList.remove('active')
+);
+
+button.classList.add('active');
+
+}
+
+}
+
+
+window.show=show;
+
+
+async function loadPeople(){
+
+const {
+data,
+error
+}=await supabase
 .from('authorized_people')
 .select(
 'id,name,type,status,qr_token,unit_id,created_at,units(name)'
 )
 .order(
 'created_at',
-{ascending:false}
+{
+ascending:false
+}
 );
+
 
 if(error){
 
 alert(
-'Error al cargar datos: '+error.message
+'Error al cargar personas: '
++error.message
 );
 
 return;
@@ -654,62 +935,82 @@ return;
 }
 
 
-cloudPeople=(data||[]).map(p=>({
+people=(data||[]).map(
+p=>({
 
 ...p,
 
-unit:p.units?.name||''
+unit:
+p.units?.name||''
 
-}));
+})
+);
 
 
-renderCloud();
+render();
 
 }
 
 
-function renderCloud(){
+function render(){
 
-document.getElementById('count').textContent=
-cloudPeople.length;
+document
+.getElementById('count')
+.textContent=
+people.length;
 
 
-document.getElementById('active').textContent=
-cloudPeople.filter(
+document
+.getElementById('active')
+.textContent=
+people.filter(
 p=>p.status==='Activo'
 ).length;
 
 
-const tb=document.getElementById('tbody');
+const tbody=
+document
+.getElementById('tbody');
 
-if(!tb)return;
 
-
-tb.innerHTML=cloudPeople.map(p=>`
+tbody.innerHTML=
+people.map(
+p=>`
 
 <tr>
 
 <td>
 
-<b>${p.name}</b>
+<b>
+${p.name}
+</b>
 
 <div class="muted">
-QR: ${p.qr_token.slice(0,8)}…
+
+QR:
+${p.qr_token
+.slice(0,8)
+.toUpperCase()}
+
 </div>
 
 </td>
+
 
 <td>
 ${p.unit}
 </td>
 
+
 <td>
 ${p.type}
 </td>
 
+
 <td>
 
-<span class="pill ${
+<span
+class="pill ${
 p.status==='Activo'
 ?'good'
 :'bad'
@@ -721,6 +1022,7 @@ ${p.status}
 
 </td>
 
+
 <td>
 
 <button
@@ -731,9 +1033,10 @@ QR
 
 </button>
 
+
 <button
 class="smallbtn"
-onclick="toggle('${p.id}')">
+onclick="toggleStatus('${p.id}')">
 
 ${
 p.status==='Activo'
@@ -747,56 +1050,88 @@ p.status==='Activo'
 
 </tr>
 
-`).join('');
+`
+).join('');
 
 }
 
 
-window.savePerson=async function(e){
+window.newPerson=function(){
 
-e.preventDefault();
+document
+.getElementById('name')
+.value='';
+
+
+document
+.getElementById('unit')
+.value='';
+
+
+document
+.getElementById('status')
+.value='Activo';
+
+
+show('form');
+
+};
+
+
+window.savePerson=
+async function(event){
+
+event.preventDefault();
 
 
 const name=
-document.getElementById('name')
+document
+.getElementById('name')
 .value
 .trim();
 
 
 const unitName=
-document.getElementById('unit')
+document
+.getElementById('unit')
 .value
 .trim();
 
 
 const type=
-document.getElementById('type')
+document
+.getElementById('type')
 .value;
 
 
 const status=
-document.getElementById('status')
+document
+.getElementById('status')
 .value;
 
 
-if(!name||!unitName)return;
-
-
-const {data:u,error:ue}=await client
+const {
+data:unit,
+error:unitError
+}=await supabase
 .from('units')
 .upsert(
-{name:unitName},
-{onConflict:'name'}
+{
+name:unitName
+},
+{
+onConflict:'name'
+}
 )
 .select()
 .single();
 
 
-if(ue){
+if(unitError){
 
 alert(
-'No se pudo guardar la casa/apartamento: '
-+ue.message
+'Error con la unidad: '
++unitError.message
 );
 
 return;
@@ -804,14 +1139,20 @@ return;
 }
 
 
-const {data:p,error}=await client
+const {
+data:person,
+error
+}=await supabase
 .from('authorized_people')
 .insert({
 
-name,
-unit_id:u.id,
-type,
-status
+name:name,
+
+unit_id:unit.id,
+
+type:type,
+
+status:status
 
 })
 .select(
@@ -823,7 +1164,7 @@ status
 if(error){
 
 alert(
-'No se pudo guardar la persona: '
+'No se pudo guardar: '
 +error.message
 );
 
@@ -832,44 +1173,47 @@ return;
 }
 
 
-cloudPeople.unshift({
-
-...p,
-
-unit:p.units?.name||unitName
-
-});
+await loadPeople();
 
 
-renderCloud();
+viewQR(
+person.id
+);
 
-window.viewQR(p.id);
 
 };
 
 
-window.toggle=async function(id){
+window.toggleStatus=
+async function(id){
 
-const p=cloudPeople.find(
-x=>x.id===id
+const person=
+people.find(
+p=>p.id===id
 );
 
-if(!p)return;
+
+if(!person)return;
 
 
-const status=
-p.status==='Activo'
+const newStatus=
+person.status==='Activo'
 ?'Inactivo'
 :'Activo';
 
 
-const {error}=await client
+const {
+error
+}=await supabase
 .from('authorized_people')
 .update({
-status,
+status:newStatus,
 updated_at:new Date().toISOString()
 })
-.eq('id',id);
+.eq(
+'id',
+id
+);
 
 
 if(error){
@@ -884,54 +1228,73 @@ return;
 }
 
 
-await load();
+await loadPeople();
 
 };
 
 
-window.viewQR=async function(id){
+window.viewQR=
+async function(id){
 
-const p=cloudPeople.find(
-x=>x.id===id
+const person=
+people.find(
+p=>p.id===id
 );
 
-if(!p)return;
+
+if(!person)return;
 
 
-document.getElementById(
-'qrname'
-).textContent=p.name;
+const backup=
+person.qr_token
+.replace(/-/g,'')
+.slice(0,8)
+.toUpperCase();
 
 
-document.getElementById(
-'qrun'
-).textContent=
-p.unit+' · '+p.type;
+document
+.getElementById('qrname')
+.textContent=
+person.name;
 
 
-document.getElementById(
-'qrstatus'
-).textContent=
-p.status==='Activo'
+document
+.getElementById('qrun')
+.textContent=
+person.unit+
+' · '+
+person.type;
+
+
+document
+.getElementById('qrcodebackup')
+.textContent=
+backup;
+
+
+document
+.getElementById('qrstatus')
+.textContent=
+person.status==='Activo'
 ?'● AUTORIZADO'
 :'● NO AUTORIZADO';
 
 
-document.getElementById(
-'qrstatus'
-).style.color=
-p.status==='Activo'
+document
+.getElementById('qrstatus')
+.style.color=
+person.status==='Activo'
 ?'#16a34a'
 :'#dc2626';
 
 
 try{
 
-document.getElementById(
-'qrimg'
-).src=
-await QR.default.toDataURL(
-p.qr_token,
+document
+.getElementById('qrimg')
+.src=
+await QRCode.toDataURL(
+person.qr_token,
 {
 width:220,
 margin:2,
@@ -939,11 +1302,9 @@ errorCorrectionLevel:'H'
 }
 );
 
-}catch(e){
+}catch(error){
 
-document.getElementById(
-'qrimg'
-).removeAttribute('src');
+console.error(error);
 
 }
 
@@ -953,72 +1314,155 @@ show('qr');
 };
 
 
-window.validate=async function(raw){
+window.validateManual=
+async function(){
 
-const token=
-String(raw||'').trim();
+const code=
+document
+.getElementById('manual')
+.value
+.trim()
+.toUpperCase();
 
 
-let p=null;
+if(!code){
+
+return;
+
+}
 
 
-if(token){
+await validate(
+code,
+true
+);
 
-const {data}=await client
+};
+
+
+async function validate(
+value,
+isBackup=false
+){
+
+const input=
+String(value||'')
+.trim();
+
+
+let person=null;
+
+
+if(!input){
+
+return;
+
+}
+
+
+if(isBackup){
+
+const {
+data,
+error
+}=await supabase
+.from('authorized_people')
+.select(
+'id,name,type,status,qr_token,unit_id,units(name)'
+);
+
+
+if(!error){
+
+person=
+(data||[])
+.find(
+p=>
+p.qr_token
+.replace(/-/g,'')
+.slice(0,8)
+.toUpperCase()
+===input.toUpperCase()
+);
+
+}
+
+}else{
+
+const {
+data
+}=await supabase
 .from('authorized_people')
 .select(
 'id,name,type,status,qr_token,unit_id,units(name)'
 )
-.eq('qr_token',token)
+.eq(
+'qr_token',
+input
+)
 .maybeSingle();
 
 
 if(data){
 
-p={
-...data,
-unit:data.units?.name||''
-};
+person=data;
 
 }
+
+}
+
+
+if(person){
+
+person.unit=
+person.units?.name||'';
 
 }
 
 
 const result=
-p&&p.status==='Activo'
+person &&
+person.status==='Activo'
 ?'AUTORIZADO'
 :'DENEGADO';
 
 
-await client
+await supabase
 .from('access_logs')
 .insert({
 
-person_id:p?.id||null,
-qr_token:p?.qr_token||null,
-result,
+person_id:
+person?.id||null,
+
+qr_token:
+person?.qr_token||null,
+
+result:result,
+
 guard_name:'Guarda'
 
 });
 
 
-const box=
-document.getElementById('result');
+const resultBox=
+document
+.getElementById('result');
 
 
-if(!p){
+if(!person){
 
-box.innerHTML=`
+resultBox.innerHTML=`
 
 <div class="result badbox">
 
-<b>✕ NO AUTORIZADO</b>
+<b>
+✕ NO AUTORIZADO
+</b>
 
 <br>
 
-<span class="muted">
-QR no encontrado.
+<span>
+QR o código no encontrado.
 </span>
 
 </div>
@@ -1030,25 +1474,31 @@ return;
 }
 
 
-if(p.status!=='Activo'){
+if(person.status!=='Activo'){
 
-box.innerHTML=`
+resultBox.innerHTML=`
 
 <div class="result badbox">
 
-<b>✕ ACCESO DENEGADO</b>
+<b>
+✕ ACCESO DENEGADO
+</b>
 
 <br>
 
-<strong>${p.name}</strong>
+<strong>
+${person.name}
+</strong>
 
 <br>
 
-${p.unit} · ${p.type}
+${person.unit}
+·
+${person.type}
 
 <br>
 
-<span class="muted">
+<span>
 La autorización está inactiva.
 </span>
 
@@ -1061,61 +1511,71 @@ return;
 }
 
 
-document.getElementById(
-'last'
-).textContent=
-p.name+' · '+
-new Date().toLocaleTimeString();
+document
+.getElementById('last')
+.textContent=
+person.name+
+' · '+
+new Date()
+.toLocaleTimeString();
 
 
-box.innerHTML=`
+resultBox.innerHTML=`
 
 <div class="result goodbox">
 
-<b>✓ ACCESO AUTORIZADO</b>
+<b>
+✓ ACCESO AUTORIZADO
+</b>
 
 <br>
 
-<strong>${p.name}</strong>
+<strong>
+${person.name}
+</strong>
 
 <br>
 
-${p.unit} · ${p.type}
+${person.unit}
+·
+${person.type}
 
 <br>
 
-<span class="muted">
-
+<span>
 ${new Date().toLocaleString()}
-
 </span>
 
 </div>
 
 `;
 
-};
+}
 
 
-// AQUÍ ESTÁ LA PARTE IMPORTANTE:
-// lector QR compatible con teléfonos mediante jsQR
-
-window.startScan=async function(){
+window.startScan=
+async function(){
 
 const video=
-document.getElementById('video');
+document
+.getElementById('video');
 
 
-video.classList.remove('hidden');
+video.classList.remove(
+'hidden'
+);
 
 
 try{
 
 const stream=
-await navigator.mediaDevices.getUserMedia({
+await navigator
+.mediaDevices
+.getUserMedia({
 
 video:{
-facingMode:'environment'
+facingMode:
+'environment'
 },
 
 audio:false
@@ -1123,24 +1583,27 @@ audio:false
 });
 
 
-video.srcObject=stream;
+video.srcObject=
+stream;
 
 
-const jsQRmod=
+const jsQRmodule=
 await import(
 'https://esm.sh/jsqr@1.4.0'
 );
 
 
 const jsQR=
-jsQRmod.default||jsQRmod;
+jsQRmodule.default||
+jsQRmodule;
 
 
 const canvas=
-document.createElement('canvas');
+document
+.createElement('canvas');
 
 
-const ctx=
+const context=
 canvas.getContext(
 '2d',
 {
@@ -1149,18 +1612,20 @@ willReadFrequently:true
 );
 
 
-const loop=async()=>{
+const scan=
+async()=>{
 
 if(video.readyState>=2){
 
 canvas.width=
 video.videoWidth;
 
+
 canvas.height=
 video.videoHeight;
 
 
-ctx.drawImage(
+context.drawImage(
 video,
 0,
 0,
@@ -1170,7 +1635,7 @@ canvas.height
 
 
 const image=
-ctx.getImageData(
+context.getImageData(
 0,
 0,
 canvas.width,
@@ -1188,15 +1653,17 @@ image.height
 
 if(code?.data){
 
-await window.validate(
-code.data
+await validate(
+code.data,
+false
 );
 
 
 stream
 .getTracks()
 .forEach(
-t=>t.stop()
+track=>
+track.stop()
 );
 
 
@@ -1204,6 +1671,7 @@ video.classList.add(
 'hidden'
 );
 
+
 return;
 
 }
@@ -1211,18 +1679,23 @@ return;
 }
 
 
-requestAnimationFrame(loop);
+requestAnimationFrame(
+scan
+);
 
 };
 
 
-loop();
+scan();
 
 
-}catch(e){
+}catch(error){
+
+console.error(error);
+
 
 alert(
-'No se pudo acceder a la cámara o al lector QR. Puede validar escribiendo el código.'
+'No se pudo acceder a la cámara. Puede usar el código de respaldo.'
 );
 
 }
@@ -1230,57 +1703,49 @@ alert(
 };
 
 
-window.newPerson=function(){
-
-document.getElementById('name').value='';
-
-document.getElementById('unit').value='';
-
-document.getElementById('status').value='Activo';
-
-show('form');
-
-};
-
-
-document.getElementById(
-'authBtn'
-).onclick=async()=>{
+document
+.getElementById('authBtn')
+.onclick=
+async function(){
 
 const email=
-document.getElementById(
-'authEmail'
-).value.trim();
+document
+.getElementById('authEmail')
+.value
+.trim();
 
 
 const password=
-document.getElementById(
-'authPass'
-).value;
+document
+.getElementById('authPass')
+.value;
 
 
-const msg=
-document.getElementById(
-'authMsg'
-);
+const message=
+document
+.getElementById('authMsg');
 
 
-msg.textContent=
-'Conectando…';
+message.textContent=
+'Conectando...';
 
 
-const {data,error}=
-await client.auth.signInWithPassword({
+const {
+error
+}=await supabase
+.auth
+.signInWithPassword({
 
-email,
-password
+email:email,
+
+password:password
 
 });
 
 
 if(error){
 
-msg.textContent=
+message.textContent=
 'Correo o contraseña incorrectos.';
 
 return;
@@ -1288,18 +1753,23 @@ return;
 }
 
 
-overlay.style.display='none';
+document
+.getElementById('login')
+.classList.add('hidden');
 
-await load();
+
+await loadPeople();
 
 };
 
 
-document.getElementById(
-'authPass'
-).onkeydown=e=>{
+document
+.getElementById('authPass')
+.addEventListener(
+'keydown',
+event=>{
 
-if(e.key==='Enter'){
+if(event.key==='Enter'){
 
 document
 .getElementById('authBtn')
@@ -1307,74 +1777,29 @@ document
 
 }
 
-};
+}
+);
 
 
 const {
 data:{
-session:current
+session
 }
-}=await client.auth.getSession();
+}=await supabase
+.auth
+.getSession();
 
 
-if(current){
-
-await load();
-
-}else{
-
-overlay.style.display='grid';
-
-}
-
-
-client.auth.onAuthStateChange(
-(event,s)=>{
-
-if(event==='SIGNED_OUT'){
-
-location.reload();
-
-}
-
-}
-);
-
-
-function show(id,btn){
+if(session){
 
 document
-.querySelectorAll(
-'main section'
-)
-.forEach(
-s=>s.classList.add('hidden')
-);
+.getElementById('login')
+.classList.add('hidden');
 
-
-document
-.getElementById(id)
-.classList.remove('hidden');
-
-
-if(btn){
-
-document
-.querySelectorAll('nav button')
-.forEach(
-b=>b.classList.remove('active')
-);
-
-btn.classList.add('active');
+await loadPeople();
 
 }
 
-}
-
-
-window.show=show;
-
-})();
 </script>
 
 </body>
