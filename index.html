@@ -3,16 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Control de Acceso</title>
+
+<title>Condominio Casa Mia · Control de Acceso</title>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
 font-family:Arial,system-ui,sans-serif;
 background:#f4f7fb;
-color:#172033
+color:#172033;
 }
 
 header{
@@ -21,39 +25,42 @@ background:white;
 border-bottom:1px solid #dfe5ee;
 display:flex;
 justify-content:space-between;
-align-items:center
+align-items:center;
 }
 
 .brand{
 display:flex;
 gap:12px;
-align-items:center
+align-items:center;
 }
 
 .logo{
-width:42px;
-height:42px;
-border-radius:12px;
+width:46px;
+height:46px;
+border-radius:13px;
 background:#2563eb;
 display:grid;
 place-items:center;
 color:white;
-font-weight:bold
+font-weight:bold;
+font-size:20px;
 }
 
-h1,h2,p{margin:0}
+h1,h2,p{
+margin:0;
+}
 
 main{
 max-width:1100px;
 margin:auto;
-padding:28px
+padding:28px;
 }
 
 nav{
 display:flex;
 gap:8px;
 margin-bottom:24px;
-flex-wrap:wrap
+flex-wrap:wrap;
 }
 
 button{
@@ -63,82 +70,82 @@ color:#172033;
 padding:11px 15px;
 border-radius:10px;
 cursor:pointer;
-font-weight:bold
+font-weight:bold;
 }
 
 button.primary{
 background:#2563eb;
 color:white;
-border-color:#2563eb
+border-color:#2563eb;
 }
 
 button.active{
 background:#2563eb;
-color:white
+color:white;
 }
 
 .hidden{
-display:none!important
+display:none!important;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:16px
+gap:16px;
 }
 
 .card{
 background:white;
 border:1px solid #dfe5ee;
 border-radius:16px;
-padding:20px
+padding:20px;
 }
 
 .stat{
 font-size:30px;
 font-weight:bold;
-margin-top:8px
+margin-top:8px;
 }
 
 .muted{
 color:#667085;
-font-size:14px
+font-size:14px;
 }
 
 .row{
 display:flex;
 justify-content:space-between;
 gap:12px;
-align-items:center
+align-items:center;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:14px
+margin-top:14px;
 }
 
 th,td{
 padding:13px 10px;
 border-bottom:1px solid #dfe5ee;
-text-align:left
+text-align:left;
 }
 
 .pill{
 padding:5px 9px;
 border-radius:99px;
 font-size:12px;
-font-weight:bold
+font-weight:bold;
 }
 
 .good{
 background:#dcfce7;
-color:#166534
+color:#166534;
 }
 
 .bad{
 background:#fee2e2;
-color:#991b1b
+color:#991b1b;
 }
 
 input,select{
@@ -148,34 +155,84 @@ border:1px solid #dfe5ee;
 border-radius:10px;
 background:white;
 color:#172033;
-margin-top:6px
+margin-top:6px;
 }
 
 label{
 font-size:13px;
-font-weight:bold
+font-weight:bold;
 }
 
 .form{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:14px
+gap:14px;
 }
 
 .full{
-grid-column:1/-1
+grid-column:1/-1;
+}
+
+
+/* CREDENCIAL */
+
+.credential{
+max-width:430px;
+margin:22px auto 0;
+background:white;
+border:1px solid #dfe5ee;
+border-radius:22px;
+overflow:hidden;
+box-shadow:0 12px 35px rgba(15,23,42,.10);
+}
+
+.credential-header{
+background:#172033;
+color:white;
+padding:22px;
+text-align:center;
+}
+
+.credential-header .condo{
+font-size:21px;
+font-weight:900;
+letter-spacing:.8px;
+}
+
+.credential-header .subtitle{
+font-size:12px;
+letter-spacing:2px;
+margin-top:7px;
+color:#cbd5e1;
+}
+
+.credential-body{
+padding:25px;
+text-align:center;
+}
+
+.credential-name{
+font-size:25px;
+font-weight:900;
+margin-bottom:6px;
+}
+
+.credential-unit{
+color:#667085;
+font-size:15px;
 }
 
 .qrbox{
 display:flex;
 flex-direction:column;
 align-items:center;
-gap:12px
+gap:12px;
 }
 
 .qrbox img{
 width:220px;
-height:220px
+height:220px;
+margin-top:8px;
 }
 
 .backup{
@@ -183,46 +240,29 @@ font-size:28px;
 font-weight:900;
 letter-spacing:4px;
 margin-top:5px;
-color:#172033
+color:#172033;
 }
 
-.scanner{
-max-width:520px;
-margin:auto;
-text-align:center
+.status{
+font-size:14px;
+font-weight:900;
+margin-top:3px;
 }
 
-video{
-width:100%;
-border-radius:16px;
-background:#000;
-margin:16px 0;
-min-height:280px
-}
-
-.result{
-margin-top:16px;
-padding:18px;
-border-radius:14px;
-text-align:left
-}
-
-.goodbox{
-background:#ecfdf3;
-border:2px solid #22c55e;
-color:#14532d
-}
-
-.badbox{
-background:#fef2f2;
-border:2px solid #ef4444;
-color:#7f1d1d
+.credential-footer{
+border-top:1px solid #e5e7eb;
+padding:16px 20px;
+text-align:center;
+background:#f8fafc;
 }
 
 .smallbtn{
 padding:7px 9px;
-font-size:12px
+font-size:12px;
 }
+
+
+/* LOGIN */
 
 .login{
 position:fixed;
@@ -231,7 +271,7 @@ background:#0b1220;
 display:grid;
 place-items:center;
 z-index:9999;
-padding:20px
+padding:20px;
 }
 
 .loginbox{
@@ -240,41 +280,93 @@ background:#121b2b;
 border:1px solid #29364b;
 border-radius:18px;
 padding:28px;
-color:white
+color:white;
 }
 
 .loginbox input{
 background:#fff;
-color:#172033
+color:#172033;
 }
+
 
 @media(max-width:650px){
 
 main{
-padding:18px
+padding:18px;
 }
 
 .form{
-grid-template-columns:1fr
+grid-template-columns:1fr;
 }
 
 .full{
-grid-column:auto
+grid-column:auto;
 }
 
 header{
-padding:18px
+padding:18px;
 }
 
 table{
-font-size:13px
+font-size:13px;
+}
+
+.credential{
+border-radius:17px;
+}
+
+.credential-header{
+padding:19px;
 }
 
 }
+
+
+/* IMPRESIÓN DE CREDENCIAL */
+
+@media print{
+
+body{
+background:white;
+}
+
+header,
+nav,
+#dash,
+#people,
+#form,
+.login,
+.no-print{
+display:none!important;
+}
+
+main{
+padding:0;
+}
+
+#qr{
+display:block!important;
+}
+
+#qr > .card{
+border:0;
+padding:0;
+}
+
+.credential{
+box-shadow:none;
+border:1px solid #ccc;
+margin:20px auto;
+}
+
+}
+
 </style>
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -289,12 +381,13 @@ QR
 <h1>Control de Acceso</h1>
 
 <div class="muted">
-Condominio · autorización digital
+Condominio Casa Mia · autorización digital
 </div>
 
 </div>
 
 </div>
+
 
 <div class="muted">
 Panel administrativo
@@ -303,7 +396,9 @@ Panel administrativo
 </header>
 
 
+
 <main>
+
 
 <nav>
 
@@ -318,17 +413,16 @@ onclick="show('people',this)">
 Autorizados
 </button>
 
-<button
-onclick="show('guard',this)">
-Modo Guarda
-</button>
-
 </nav>
 
+
+
+<!-- DASHBOARD -->
 
 <section id="dash">
 
 <div class="grid">
+
 
 <div class="card">
 
@@ -343,6 +437,7 @@ id="count">
 </div>
 
 </div>
+
 
 
 <div class="card">
@@ -360,22 +455,24 @@ id="active">
 </div>
 
 
+
 <div class="card">
 
 <div class="muted">
-Último acceso
+Sistema
 </div>
 
 <div
 class="stat"
-style="font-size:18px"
-id="last">
-Sin registros
+style="font-size:18px">
+Casa Mia
 </div>
 
 </div>
 
+
 </div>
+
 
 
 <div
@@ -383,18 +480,24 @@ class="card"
 style="margin-top:18px">
 
 <h2>
-Cómo funciona
+Control de accesos
 </h2>
 
 <p
 class="muted"
-style="margin-top:10px;line-height:1.6">
+style="margin-top:10px;line-height:1.7">
 
 1. Administración registra a la persona.<br>
-2. Se genera un QR único.<br>
-3. El residente muestra el QR al guarda.<br>
-4. Si el QR falla, el guarda puede usar el código de respaldo.<br>
-5. El sistema indica si el acceso está autorizado.
+
+2. El sistema genera una credencial con QR único.<br>
+
+3. La credencial muestra el nombre, casa y tipo de autorización.<br>
+
+4. El guarda escanea el QR desde su panel independiente.<br>
+
+5. Si el QR no puede leerse, puede utilizar el código de respaldo.<br>
+
+6. Una autorización desactivada deja de permitir el acceso.
 
 </p>
 
@@ -403,9 +506,13 @@ style="margin-top:10px;line-height:1.6">
 </section>
 
 
+
+<!-- PERSONAS -->
+
 <section
 id="people"
 class="hidden">
+
 
 <div class="row">
 
@@ -416,10 +523,11 @@ Personas autorizadas
 </h2>
 
 <div class="muted">
-Administra quién puede ingresar.
+Administra quién puede ingresar a Condominio Casa Mia.
 </div>
 
 </div>
+
 
 <button
 class="primary"
@@ -430,6 +538,7 @@ onclick="newPerson()">
 </button>
 
 </div>
+
 
 
 <div
@@ -466,7 +575,9 @@ Acciones
 
 </thead>
 
-<tbody id="tbody"></tbody>
+
+<tbody id="tbody">
+</tbody>
 
 </table>
 
@@ -475,83 +586,15 @@ Acciones
 </section>
 
 
-<section
-id="guard"
-class="hidden">
 
-<div class="scanner">
-
-<h2>
-Modo Guarda
-</h2>
-
-<p
-class="muted"
-style="margin-top:8px">
-
-Escanee el QR o escriba el código de respaldo.
-
-</p>
-
-
-<button
-class="primary"
-style="margin-top:16px"
-onclick="startScan()">
-
-📷 Activar cámara
-
-</button>
-
-
-<video
-id="video"
-class="hidden"
-autoplay
-playsinline>
-</video>
-
-
-<div
-style="display:flex;gap:8px;margin-top:10px">
-
-<input
-id="manual"
-placeholder="Ej. A7F29C31"
-maxlength="8"
-style="text-transform:uppercase">
-
-<button
-onclick="validateManual()">
-
-Validar
-
-</button>
-
-</div>
-
-
-<div
-class="muted"
-style="margin-top:8px">
-
-Código de respaldo: 8 caracteres.
-
-</div>
-
-
-<div id="result"></div>
-
-</div>
-
-</section>
-
+<!-- NUEVA PERSONA -->
 
 <section
 id="form"
 class="hidden">
 
 <div class="card">
+
 
 <div class="row">
 
@@ -562,10 +605,11 @@ Nueva persona
 </h2>
 
 <div class="muted">
-El QR y el código se generan automáticamente.
+El QR y el código de respaldo se generan automáticamente.
 </div>
 
 </div>
+
 
 <button
 onclick="show('people')">
@@ -577,11 +621,14 @@ Cancelar
 </div>
 
 
+
 <form
 onsubmit="savePerson(event)"
 style="margin-top:20px">
 
+
 <div class="form">
+
 
 <div>
 
@@ -591,9 +638,11 @@ Nombre completo
 
 <input
 id="name"
-required>
+required
+placeholder="Nombre de la persona">
 
 </div>
+
 
 
 <div>
@@ -604,9 +653,11 @@ Casa / apartamento
 
 <input
 id="unit"
-required>
+required
+placeholder="Ej. Casa 24">
 
 </div>
+
 
 
 <div>
@@ -638,6 +689,7 @@ Proveedor
 </div>
 
 
+
 <div>
 
 <label>
@@ -659,6 +711,7 @@ Inactivo
 </div>
 
 
+
 <div class="full">
 
 <button
@@ -671,6 +724,7 @@ Guardar autorización
 
 </div>
 
+
 </div>
 
 </form>
@@ -680,13 +734,18 @@ Guardar autorización
 </section>
 
 
+
+<!-- CREDENCIAL -->
+
 <section
 id="qr"
 class="hidden">
 
+
 <div class="card">
 
-<div class="row">
+
+<div class="row no-print">
 
 <div>
 
@@ -695,10 +754,11 @@ Credencial de acceso
 </h2>
 
 <div class="muted">
-El autorizado puede mostrar esta pantalla desde su teléfono.
+Lista para mostrar desde el teléfono, imprimir o guardar como PDF.
 </div>
 
 </div>
+
 
 <button
 onclick="show('people')">
@@ -710,19 +770,39 @@ Volver
 </div>
 
 
-<div
-class="qrbox"
-style="margin-top:22px">
+
+<div class="credential">
 
 
-<h2 id="qrname"></h2>
+<div class="credential-header">
 
-
-<div
-class="muted"
-id="qrun">
+<div class="condo">
+🏘️ CONDOMINIO CASA MIA
 </div>
 
+<div class="subtitle">
+CREDENCIAL DE ACCESO
+</div>
+
+</div>
+
+
+
+<div class="credential-body">
+
+<div
+id="qrname"
+class="credential-name">
+</div>
+
+
+<div
+id="qrun"
+class="credential-unit">
+</div>
+
+
+<div class="qrbox">
 
 <img
 id="qrimg"
@@ -730,15 +810,15 @@ alt="Código QR">
 
 
 <strong
-id="qrstatus">
+id="qrstatus"
+class="status">
 </strong>
 
 
-<div
-style="text-align:center;margin-top:10px">
+<div style="margin-top:8px">
 
 <div class="muted">
-Código de respaldo
+CÓDIGO DE RESPALDO
 </div>
 
 
@@ -747,53 +827,81 @@ id="qrcodebackup"
 class="backup">
 </div>
 
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="credential-footer">
+
+<div class="muted">
+Presente esta credencial al personal de seguridad.
+</div>
 
 <div
 class="muted"
-style="margin-top:6px">
+style="margin-top:5px">
 
-Si la cámara no puede leer el QR,
-el guarda puede escribir este código.
-
-</div>
+El acceso está sujeto al estado actual de la autorización.
 
 </div>
 
+</div>
+
+
+</div>
+
+
+
+<div
+class="no-print"
+style="text-align:center;margin-top:18px">
 
 <button
 class="primary"
 onclick="window.print()">
 
-🖨 Imprimir / Guardar
+🖨 Imprimir / Guardar credencial
 
 </button>
 
-
 </div>
+
 
 </div>
 
 </section>
 
+
 </main>
 
+
+
+<!-- LOGIN ADMIN -->
 
 <div
 id="login"
 class="login">
 
+
 <div class="loginbox">
 
+
 <h2>
-🔐 Iniciar sesión
+🔐 Administración
 </h2>
+
 
 <p
 style="color:#a9b5c8;margin-top:8px">
 
-Panel de administración del condominio
+Condominio Casa Mia · Panel administrativo
 
 </p>
+
 
 
 <label
@@ -803,10 +911,12 @@ Correo
 
 </label>
 
+
 <input
 id="authEmail"
 type="email"
 placeholder="admin@condominio.com">
+
 
 
 <label
@@ -816,10 +926,12 @@ Contraseña
 
 </label>
 
+
 <input
 id="authPass"
 type="password"
 placeholder="Contraseña">
+
 
 
 <button
@@ -837,23 +949,25 @@ id="authMsg"
 style="margin-top:12px;color:#fca5a5">
 </div>
 
+
 </div>
 
 </div>
+
 
 
 <script type="module">
 
+
 import {
 createClient
 }
-from
-'https://esm.sh/@supabase/supabase-js@2';
+from 'https://esm.sh/@supabase/supabase-js@2';
 
 
 import QRCode
-from
-'https://esm.sh/qrcode@1.5.4';
+from 'https://esm.sh/qrcode@1.5.4';
+
 
 
 const SUPABASE_URL =
@@ -864,6 +978,7 @@ const SUPABASE_KEY =
 'sb_publishable_IipOpR7MYXbCpNVOqSpGhw_BZZJV7fo';
 
 
+
 const supabase =
 createClient(
 SUPABASE_URL,
@@ -871,7 +986,9 @@ SUPABASE_KEY
 );
 
 
+
 let people=[];
+
 
 
 function show(id,button){
@@ -881,6 +998,7 @@ document
 .forEach(
 s=>s.classList.add('hidden')
 );
+
 
 document
 .getElementById(id)
@@ -903,6 +1021,7 @@ button.classList.add('active');
 
 
 window.show=show;
+
 
 
 async function loadPeople(){
@@ -952,6 +1071,7 @@ render();
 }
 
 
+
 function render(){
 
 document
@@ -982,13 +1102,14 @@ p=>`
 <td>
 
 <b>
-${p.name}
+${escapeHTML(p.name)}
 </b>
 
 <div class="muted">
 
-QR:
+Código:
 ${p.qr_token
+.replace(/-/g,'')
 .slice(0,8)
 .toUpperCase()}
 
@@ -998,12 +1119,12 @@ ${p.qr_token
 
 
 <td>
-${p.unit}
+${escapeHTML(p.unit)}
 </td>
 
 
 <td>
-${p.type}
+${escapeHTML(p.type)}
 </td>
 
 
@@ -1016,7 +1137,7 @@ p.status==='Activo'
 :'bad'
 }">
 
-${p.status}
+${escapeHTML(p.status)}
 
 </span>
 
@@ -1029,7 +1150,7 @@ ${p.status}
 class="smallbtn"
 onclick="viewQR('${p.id}')">
 
-QR
+Ver QR
 
 </button>
 
@@ -1056,6 +1177,20 @@ p.status==='Activo'
 }
 
 
+
+function escapeHTML(value){
+
+return String(value ?? '')
+.replaceAll('&','&amp;')
+.replaceAll('<','&lt;')
+.replaceAll('>','&gt;')
+.replaceAll('"','&quot;')
+.replaceAll("'","&#039;");
+
+}
+
+
+
 window.newPerson=function(){
 
 document
@@ -1069,6 +1204,11 @@ document
 
 
 document
+.getElementById('type')
+.value='Residente';
+
+
+document
 .getElementById('status')
 .value='Activo';
 
@@ -1076,6 +1216,7 @@ document
 show('form');
 
 };
+
 
 
 window.savePerson=
@@ -1110,6 +1251,19 @@ document
 .value;
 
 
+
+if(!name || !unitName){
+
+alert(
+'Complete el nombre y la casa o apartamento.'
+);
+
+return;
+
+}
+
+
+
 const {
 data:unit,
 error:unitError
@@ -1127,6 +1281,7 @@ onConflict:'name'
 .single();
 
 
+
 if(unitError){
 
 alert(
@@ -1137,6 +1292,7 @@ alert(
 return;
 
 }
+
 
 
 const {
@@ -1161,6 +1317,7 @@ status:status
 .single();
 
 
+
 if(error){
 
 alert(
@@ -1173,6 +1330,7 @@ return;
 }
 
 
+
 await loadPeople();
 
 
@@ -1180,8 +1338,8 @@ viewQR(
 person.id
 );
 
-
 };
+
 
 
 window.toggleStatus=
@@ -1202,18 +1360,23 @@ person.status==='Activo'
 :'Activo';
 
 
+
 const {
 error
 }=await supabase
 .from('authorized_people')
 .update({
+
 status:newStatus,
+
 updated_at:new Date().toISOString()
+
 })
 .eq(
 'id',
 id
 );
+
 
 
 if(error){
@@ -1228,9 +1391,11 @@ return;
 }
 
 
+
 await loadPeople();
 
 };
+
 
 
 window.viewQR=
@@ -1245,6 +1410,7 @@ p=>p.id===id
 if(!person)return;
 
 
+
 const backup=
 person.qr_token
 .replace(/-/g,'')
@@ -1252,10 +1418,12 @@ person.qr_token
 .toUpperCase();
 
 
+
 document
 .getElementById('qrname')
 .textContent=
 person.name;
+
 
 
 document
@@ -1266,10 +1434,12 @@ person.unit+
 person.type;
 
 
+
 document
 .getElementById('qrcodebackup')
 .textContent=
 backup;
+
 
 
 document
@@ -1280,12 +1450,14 @@ person.status==='Activo'
 :'● NO AUTORIZADO';
 
 
+
 document
 .getElementById('qrstatus')
 .style.color=
 person.status==='Activo'
 ?'#16a34a'
 :'#dc2626';
+
 
 
 try{
@@ -1296,9 +1468,13 @@ document
 await QRCode.toDataURL(
 person.qr_token,
 {
+
 width:220,
+
 margin:2,
+
 errorCorrectionLevel:'H'
+
 }
 );
 
@@ -1306,7 +1482,12 @@ errorCorrectionLevel:'H'
 
 console.error(error);
 
+alert(
+'No se pudo generar el código QR.'
+);
+
 }
+
 
 
 show('qr');
@@ -1314,399 +1495,12 @@ show('qr');
 };
 
 
-window.validateManual=
-async function(){
-
-const code=
-document
-.getElementById('manual')
-.value
-.trim()
-.toUpperCase();
-
-
-if(!code){
-
-return;
-
-}
-
-
-await validate(
-code,
-true
-);
-
-};
-
-
-async function validate(
-value,
-isBackup=false
-){
-
-const input=
-String(value||'')
-.trim();
-
-
-let person=null;
-
-
-if(!input){
-
-return;
-
-}
-
-
-if(isBackup){
-
-const {
-data,
-error
-}=await supabase
-.from('authorized_people')
-.select(
-'id,name,type,status,qr_token,unit_id,units(name)'
-);
-
-
-if(!error){
-
-person=
-(data||[])
-.find(
-p=>
-p.qr_token
-.replace(/-/g,'')
-.slice(0,8)
-.toUpperCase()
-===input.toUpperCase()
-);
-
-}
-
-}else{
-
-const {
-data
-}=await supabase
-.from('authorized_people')
-.select(
-'id,name,type,status,qr_token,unit_id,units(name)'
-)
-.eq(
-'qr_token',
-input
-)
-.maybeSingle();
-
-
-if(data){
-
-person=data;
-
-}
-
-}
-
-
-if(person){
-
-person.unit=
-person.units?.name||'';
-
-}
-
-
-const result=
-person &&
-person.status==='Activo'
-?'AUTORIZADO'
-:'DENEGADO';
-
-
-await supabase
-.from('access_logs')
-.insert({
-
-person_id:
-person?.id||null,
-
-qr_token:
-person?.qr_token||null,
-
-result:result,
-
-guard_name:'Guarda'
-
-});
-
-
-const resultBox=
-document
-.getElementById('result');
-
-
-if(!person){
-
-resultBox.innerHTML=`
-
-<div class="result badbox">
-
-<b>
-✕ NO AUTORIZADO
-</b>
-
-<br>
-
-<span>
-QR o código no encontrado.
-</span>
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-if(person.status!=='Activo'){
-
-resultBox.innerHTML=`
-
-<div class="result badbox">
-
-<b>
-✕ ACCESO DENEGADO
-</b>
-
-<br>
-
-<strong>
-${person.name}
-</strong>
-
-<br>
-
-${person.unit}
-·
-${person.type}
-
-<br>
-
-<span>
-La autorización está inactiva.
-</span>
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-document
-.getElementById('last')
-.textContent=
-person.name+
-' · '+
-new Date()
-.toLocaleTimeString();
-
-
-resultBox.innerHTML=`
-
-<div class="result goodbox">
-
-<b>
-✓ ACCESO AUTORIZADO
-</b>
-
-<br>
-
-<strong>
-${person.name}
-</strong>
-
-<br>
-
-${person.unit}
-·
-${person.type}
-
-<br>
-
-<span>
-${new Date().toLocaleString()}
-</span>
-
-</div>
-
-`;
-
-}
-
-
-window.startScan=
-async function(){
-
-const video=
-document
-.getElementById('video');
-
-
-video.classList.remove(
-'hidden'
-);
-
-
-try{
-
-const stream=
-await navigator
-.mediaDevices
-.getUserMedia({
-
-video:{
-facingMode:
-'environment'
-},
-
-audio:false
-
-});
-
-
-video.srcObject=
-stream;
-
-
-const jsQRmodule=
-await import(
-'https://esm.sh/jsqr@1.4.0'
-);
-
-
-const jsQR=
-jsQRmodule.default||
-jsQRmodule;
-
-
-const canvas=
-document
-.createElement('canvas');
-
-
-const context=
-canvas.getContext(
-'2d',
-{
-willReadFrequently:true
-}
-);
-
-
-const scan=
-async()=>{
-
-if(video.readyState>=2){
-
-canvas.width=
-video.videoWidth;
-
-
-canvas.height=
-video.videoHeight;
-
-
-context.drawImage(
-video,
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-const image=
-context.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-const code=
-jsQR(
-image.data,
-image.width,
-image.height
-);
-
-
-if(code?.data){
-
-await validate(
-code.data,
-false
-);
-
-
-stream
-.getTracks()
-.forEach(
-track=>
-track.stop()
-);
-
-
-video.classList.add(
-'hidden'
-);
-
-
-return;
-
-}
-
-}
-
-
-requestAnimationFrame(
-scan
-);
-
-};
-
-
-scan();
-
-
-}catch(error){
-
-console.error(error);
-
-
-alert(
-'No se pudo acceder a la cámara. Puede usar el código de respaldo.'
-);
-
-}
-
-};
-
 
 document
 .getElementById('authBtn')
 .onclick=
 async function(){
+
 
 const email=
 document
@@ -1730,9 +1524,11 @@ message.textContent=
 'Conectando...';
 
 
+
 const {
 error
-}=await supabase
+}=
+await supabase
 .auth
 .signInWithPassword({
 
@@ -1741,6 +1537,7 @@ email:email,
 password:password
 
 });
+
 
 
 if(error){
@@ -1753,6 +1550,10 @@ return;
 }
 
 
+
+message.textContent='';
+
+
 document
 .getElementById('login')
 .classList.add('hidden');
@@ -1761,6 +1562,7 @@ document
 await loadPeople();
 
 };
+
 
 
 document
@@ -1781,6 +1583,7 @@ document
 );
 
 
+
 const {
 data:{
 session
@@ -1788,6 +1591,7 @@ session
 }=await supabase
 .auth
 .getSession();
+
 
 
 if(session){
@@ -1799,6 +1603,7 @@ document
 await loadPeople();
 
 }
+
 
 </script>
 
