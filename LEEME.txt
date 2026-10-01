@@ -1,0 +1,19 @@
+CASA MIA — DOBLE APP
+
+Suba TODO el contenido de esta carpeta a la raíz del repositorio.
+
+ADMINISTRACIÓN (iPhone):
+- URL: https://control-acceso-condominio.vercel.app/
+- Safari > Compartir > Añadir a pantalla de inicio
+- Nombre: Casa Mia Admin
+- Icono: ADMIN
+
+GUARDA (Android):
+- URL: https://control-acceso-condominio.vercel.app/guarda.html
+- Chrome > Instalar aplicación / Añadir a pantalla principal
+- Nombre: Casa Mia Acceso
+
+IMPORTANTE:
+- index.html = administración
+- guarda.html = guardas
+- Ambos siguen usando la misma base de datos Supabase.
