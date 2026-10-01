@@ -1,0 +1,23 @@
+{
+  "name": "Casa Mia Acceso",
+  "short_name": "Casa Mia",
+  "description": "Control de acceso para guardas del Condominio Casa Mia",
+  "start_url": "/guarda.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
